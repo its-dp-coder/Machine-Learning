@@ -994,3 +994,263 @@ Quick Revision
 ✓ Detection methods: Box Plot, Scatter Plot, Z-Score, IQR.
 ✓ Handle by removing, replacing, capping, transforming, or keeping (if valid).
 ✓ Never remove an outlier without understanding why it exists.
+
+=====================================
+FEATURE SCALING IN MACHINE LEARNING
+=====================================
+
+Definition
+----------
+Feature Scaling is the process of transforming numerical features so that they
+have a similar range or scale.
+
+In simple words:
+"Feature Scaling makes all numerical values comparable by bringing them to a
+similar range."
+
+Why is Feature Scaling Important?
+---------------------------------
+Different features in a dataset can have very different ranges.
+
+Example:
+
+Age        = 25
+Salary     = ₹50,00,000
+
+Here, Salary has much larger values than Age.
+Some Machine Learning algorithms may give more importance to Salary simply
+because its values are larger.
+
+Feature Scaling ensures that no feature dominates another due to its magnitude.
+
+-------------------------------------
+Example Before Scaling
+-------------------------------------
+
+Age      Salary (₹)
+
+20       3,00,000
+25       5,00,000
+30       8,00,000
+
+Notice:
+Age values range from 20–30,
+while Salary values range from ₹3,00,000–₹8,00,000.
+
+-------------------------------------
+Example After Scaling
+-------------------------------------
+
+Age      Salary
+
+0.00     0.00
+0.50     0.40
+1.00     1.00
+
+Now both features are on a similar scale.
+
+-------------------------------------
+When is Feature Scaling Required?
+-------------------------------------
+
+Feature Scaling is important for algorithms that depend on distance or gradient.
+
+Examples:
+✓ K-Nearest Neighbors (KNN)
+✓ K-Means Clustering
+✓ Support Vector Machine (SVM)
+✓ Linear Regression (Gradient Descent)
+✓ Logistic Regression
+✓ Neural Networks
+✓ Principal Component Analysis (PCA)
+
+-------------------------------------
+When is Feature Scaling NOT Required?
+-------------------------------------
+
+Tree-based algorithms generally do not require feature scaling.
+
+Examples:
+✓ Decision Tree
+✓ Random Forest
+✓ XGBoost
+✓ LightGBM
+✓ CatBoost
+
+Reason:
+These algorithms split data based on feature values, not on distances.
+
+-------------------------------------
+Types of Feature Scaling
+-------------------------------------
+
+1. Standardization (Z-Score Normalization)
+------------------------------------------
+
+Definition:
+Transforms data so that it has:
+
+• Mean = 0
+• Standard Deviation = 1
+
+Formula:
+
+Z = (X − Mean) / Standard Deviation
+
+Range:
+No fixed range.
+
+Best Used For:
+• Data with approximately normal (Gaussian) distribution.
+• Algorithms like Logistic Regression, SVM, PCA, and Neural Networks.
+
+Example:
+
+Original:
+
+10
+20
+30
+
+After Standardization:
+
+-1.22
+0
+1.22
+
+-------------------------------------
+
+2. Normalization (Min-Max Scaling)
+----------------------------------
+
+Definition:
+Scales data into a fixed range.
+
+Usually:
+
+0 to 1
+
+Formula:
+
+X' = (X − Minimum) / (Maximum − Minimum)
+
+Range:
+
+0 ≤ X ≤ 1
+
+Best Used For:
+• Algorithms based on distance (KNN, K-Means).
+• Neural Networks.
+
+Example:
+
+Original:
+
+20
+40
+60
+
+After Normalization:
+
+0.0
+0.5
+1.0
+
+-------------------------------------
+Standardization vs Normalization
+-------------------------------------
+
+Standardization
+
+• Mean becomes 0
+• Standard deviation becomes 1
+• No fixed range
+• Handles outliers better than Min-Max Scaling
+
+Normalization
+
+• Scales values between 0 and 1
+• Has a fixed range
+• Sensitive to outliers
+• Commonly used for distance-based algorithms
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Improves model performance.
+• Faster model training.
+• Prevents one feature from dominating others.
+• Helps gradient-based algorithms converge faster.
+• Improves distance calculations.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Not needed for tree-based models.
+• Min-Max Scaling is sensitive to outliers.
+• Requires scaling new data using the same parameters as the training data.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Suppose you want to predict house prices.
+
+Features:
+
+Area (sq ft) = 2000
+Number of Rooms = 3
+
+Without scaling:
+The Area values are much larger than the Room values, so some algorithms may
+give Area much more importance.
+
+After Feature Scaling:
+Both features contribute more fairly during model training.
+
+-------------------------------------
+Interview Questions
+-------------------------------------
+
+Q1. What is Feature Scaling?
+Ans:
+Feature Scaling is the process of bringing numerical features to a similar scale
+so that Machine Learning algorithms treat them fairly.
+
+Q2. Why is Feature Scaling important?
+Ans:
+Because features with larger values can dominate smaller-valued features,
+especially in distance-based and gradient-based algorithms.
+
+Q3. What are the two main Feature Scaling techniques?
+Ans:
+• Standardization (Z-Score)
+• Normalization (Min-Max Scaling)
+
+Q4. Which algorithms require Feature Scaling?
+Ans:
+KNN, K-Means, SVM, Logistic Regression, Linear Regression (Gradient Descent),
+Neural Networks, and PCA.
+
+Q5. Which algorithms do not require Feature Scaling?
+Ans:
+Decision Tree, Random Forest, XGBoost, LightGBM, and CatBoost.
+
+Q6. What is the difference between Standardization and Normalization?
+Ans:
+Standardization transforms data to have a mean of 0 and a standard deviation of 1,
+while Normalization scales data to a fixed range, usually 0 to 1.
+
+-------------------------------------
+Quick Revision
+-------------------------------------
+
+✓ Feature Scaling = Bringing features to a similar scale.
+✓ Prevents large-value features from dominating.
+✓ Standardization → Mean = 0, Standard Deviation = 1.
+✓ Normalization → Values between 0 and 1.
+✓ Required for KNN, K-Means, SVM, PCA, Neural Networks.
+✓ Not required for Decision Trees and Random Forests.
+✓ Scaling often improves training speed and model accuracy.
