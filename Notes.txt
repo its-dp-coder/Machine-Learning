@@ -1254,3 +1254,1897 @@ Quick Revision
 ✓ Required for KNN, K-Means, SVM, PCA, Neural Networks.
 ✓ Not required for Decision Trees and Random Forests.
 ✓ Scaling often improves training speed and model accuracy.
+
+=====================================
+HOW TO HANDLE DUPLICATE DATA?
+=====================================
+
+Definition
+----------
+Duplicate data refers to records (rows) that appear more than once in a dataset.
+
+In simple words:
+"Duplicate data means the same information is stored multiple times."
+
+Example Before Removing Duplicates
+----------------------------------
+
+Customer_ID   Name     Age   City
+
+101           Rahul    25    Delhi
+102           Priya    30    Mumbai
+101           Rahul    25    Delhi   ← Duplicate
+103           Amit     28    Pune
+
+Here, the third row is a duplicate of the first row.
+
+-------------------------------------
+Why Should We Remove Duplicate Data?
+-------------------------------------
+
+Duplicate data can:
+
+• Reduce the quality of the dataset.
+• Produce incorrect analysis.
+• Bias Machine Learning models.
+• Increase storage space.
+• Slow down data processing.
+
+-------------------------------------
+How to Detect Duplicate Data?
+-------------------------------------
+
+1. Check Entire Rows
+--------------------
+Find rows where all column values are identical.
+
+Example:
+
+ID   Name   Age
+
+1    Rahul  25
+1    Rahul  25  ← Duplicate
+
+-------------------------------------
+
+2. Check Specific Columns
+-------------------------
+Sometimes only certain columns should be unique.
+
+Example:
+
+Customer_ID
+
+101
+102
+101  ← Duplicate Customer_ID
+
+-------------------------------------
+
+3. Use Pandas Functions
+-----------------------
+
+Check duplicate rows:
+
+dataset.duplicated()
+
+Count duplicate rows:
+
+dataset.duplicated().sum()
+
+View duplicate rows:
+
+dataset[dataset.duplicated()]
+
+-------------------------------------
+How to Remove Duplicate Data?
+-------------------------------------
+
+Method 1: Remove All Duplicate Rows
+-----------------------------------
+
+dataset.drop_duplicates()
+
+-------------------------------------
+
+Method 2: Remove Duplicates and Save Changes
+--------------------------------------------
+
+dataset.drop_duplicates(inplace=True)
+
+-------------------------------------
+
+Method 3: Remove Duplicates Based on Specific Columns
+-----------------------------------------------------
+
+dataset.drop_duplicates(subset=["Customer_ID"])
+
+-------------------------------------
+
+Method 4: Keep the Last Occurrence
+----------------------------------
+
+dataset.drop_duplicates(keep="last")
+
+Options:
+• keep="first" (Default)
+• keep="last"
+• keep=False (Removes all duplicate occurrences)
+
+-------------------------------------
+Example
+-------------------------------------
+
+Before:
+
+ID   Name
+
+1    Rahul
+2    Priya
+1    Rahul
+3    Amit
+
+After drop_duplicates():
+
+ID   Name
+
+1    Rahul
+2    Priya
+3    Amit
+
+-------------------------------------
+When Should We Remove Duplicates?
+-------------------------------------
+
+Remove duplicates when:
+
+✓ Duplicate rows are created by mistake.
+✓ Repeated records affect analysis.
+✓ Multiple copies contain the same information.
+
+Do NOT remove duplicates when:
+
+✓ They represent real-world repeated events.
+
+Example:
+A customer buying the same product twice on different dates is **not** a duplicate.
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Improves data quality.
+• Reduces storage requirements.
+• Speeds up processing.
+• Improves Machine Learning performance.
+• Produces more accurate analysis.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Incorrect removal can delete important data.
+• Requires understanding of the dataset.
+• Some repeated records may be genuine and should not be removed.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Suppose an e-commerce company has customer records.
+
+Customer_ID   Name
+
+1001          Ankit
+1002          Neha
+1001          Ankit
+
+The duplicate record should be removed because it was entered twice.
+
+However:
+
+Order_ID   Customer_ID   Product
+
+5001       1001          Laptop
+5002       1001          Mouse
+
+These are **not** duplicates because they represent two different purchases.
+
+-------------------------------------
+Interview Questions
+-------------------------------------
+
+Q1. What is duplicate data?
+Ans:
+Duplicate data consists of repeated records that appear more than once in a dataset.
+
+Q2. Why should duplicate data be removed?
+Ans:
+Because it reduces data quality, increases storage, slows processing, and can negatively affect Machine Learning models.
+
+Q3. How do you detect duplicate rows in Pandas?
+Ans:
+Using:
+dataset.duplicated()
+
+Q4. How do you count duplicate rows?
+Ans:
+Using:
+dataset.duplicated().sum()
+
+Q5. How do you remove duplicate rows?
+Ans:
+Using:
+dataset.drop_duplicates()
+
+Q6. Can all duplicate records be removed?
+Ans:
+No. Only accidental duplicates should be removed. Genuine repeated events should be kept.
+
+-------------------------------------
+Quick Revision
+-------------------------------------
+
+✓ Duplicate data = Repeated records.
+✓ Duplicate data can reduce model accuracy.
+✓ Detect duplicates using:
+  dataset.duplicated()
+✓ Count duplicates using:
+  dataset.duplicated().sum()
+✓ Remove duplicates using:
+  dataset.drop_duplicates()
+✓ Keep genuine repeated transactions; remove only incorrect duplicate entries.
+
+
+
+=====================================
+HOW TO REPLACE AND CHANGE DATA TYPES?
+=====================================
+
+Definition
+----------
+Changing Data Types is the process of converting a column from one data type
+to another so that it can be processed correctly.
+
+Replacing Data means changing existing values in a dataset with new values.
+
+Both are important steps in Data Preprocessing before training a Machine
+Learning model.
+
+-------------------------------------
+Why is it Important?
+-------------------------------------
+
+• Ensures data is in the correct format.
+• Prevents errors during analysis.
+• Improves model performance.
+• Makes calculations possible.
+• Handles inconsistent values.
+
+-------------------------------------
+Common Data Types in Pandas
+-------------------------------------
+
+1. int
+-------
+Whole numbers
+
+Example:
+25
+100
+500
+
+-------------------------------------
+
+2. float
+---------
+Decimal numbers
+
+Example:
+25.5
+99.75
+5000.25
+
+-------------------------------------
+
+3. object
+----------
+Text (String)
+
+Example:
+"Male"
+"Delhi"
+"Python"
+
+-------------------------------------
+
+4. bool
+--------
+True or False
+
+Example:
+True
+False
+
+-------------------------------------
+
+5. datetime
+------------
+Date and time values
+
+Example:
+2026-07-30
+2025-01-01
+
+-------------------------------------
+How to Check Data Types?
+-------------------------------------
+
+Check data types of all columns:
+
+dataset.dtypes
+
+Detailed information:
+
+dataset.info()
+
+-------------------------------------
+How to Change Data Types?
+-------------------------------------
+
+Method 1: astype()
+------------------
+
+Syntax:
+
+dataset["Age"] = dataset["Age"].astype(int)
+
+Example:
+
+Before:
+
+Age
+
+"25"
+"30"
+
+After:
+
+25
+30
+
+-------------------------------------
+
+Convert to Float
+
+dataset["Salary"] = dataset["Salary"].astype(float)
+
+-------------------------------------
+
+Convert to String
+
+dataset["ID"] = dataset["ID"].astype(str)
+
+-------------------------------------
+
+Convert to Boolean
+
+dataset["Purchased"] = dataset["Purchased"].astype(bool)
+
+-------------------------------------
+
+Convert to Category
+
+dataset["Gender"] = dataset["Gender"].astype("category")
+
+-------------------------------------
+Method 2: pd.to_numeric()
+-------------------------------------
+
+Used when a column contains numbers stored as text.
+
+Syntax:
+
+dataset["Marks"] = pd.to_numeric(dataset["Marks"])
+
+If invalid values exist:
+
+dataset["Marks"] = pd.to_numeric(
+    dataset["Marks"],
+    errors="coerce"
+)
+
+Invalid values become NaN.
+
+-------------------------------------
+Method 3: pd.to_datetime()
+-------------------------------------
+
+Convert text into DateTime.
+
+Syntax:
+
+dataset["Joining_Date"] = pd.to_datetime(
+    dataset["Joining_Date"]
+)
+
+Example:
+
+Before:
+
+"30/07/2026"
+
+After:
+
+2026-07-30
+
+-------------------------------------
+How to Replace Data?
+-------------------------------------
+
+Method 1: replace()
+
+Syntax:
+
+dataset.replace(old_value, new_value)
+
+Example:
+
+Before:
+
+Gender
+
+Male
+Female
+
+Replace:
+
+dataset["Gender"] = dataset["Gender"].replace(
+    "Male", "M"
+)
+
+After:
+
+M
+Female
+
+-------------------------------------
+
+Method 2: Replace Multiple Values
+
+dataset["City"] = dataset["City"].replace({
+    "Delhi":"DL",
+    "Mumbai":"MB",
+    "Pune":"PN"
+})
+
+-------------------------------------
+
+Method 3: Replace Missing Values
+
+dataset["Age"] = dataset["Age"].fillna(
+    dataset["Age"].mean()
+)
+
+-------------------------------------
+
+Method 4: Replace Using Lambda Function
+
+dataset["Salary"] = dataset["Salary"].apply(
+    lambda x: x * 1.10
+)
+
+This increases every salary by 10%.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Before Cleaning
+
+Name    Age     Salary      Gender
+
+Rahul   "25"    "50000"     Male
+Priya   "30"    "60000"     Female
+
+Steps:
+
+✓ Convert Age to Integer.
+✓ Convert Salary to Float.
+✓ Replace Male → M.
+✓ Replace Female → F.
+
+After Cleaning
+
+Name    Age    Salary    Gender
+
+Rahul   25     50000.0   M
+Priya   30     60000.0   F
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Corrects data inconsistencies.
+• Enables mathematical operations.
+• Improves Machine Learning performance.
+• Prevents data type errors.
+• Makes analysis easier.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Wrong conversions may lose information.
+• Invalid values can become NaN.
+• Requires checking data before conversion.
+
+-------------------------------------
+Interview Questions
+-------------------------------------
+
+Q1. What is data type conversion?
+Ans:
+It is the process of changing a column from one data type to another (e.g., string to integer).
+
+Q2. Why do we change data types?
+Ans:
+To ensure data is in the correct format for analysis and Machine Learning algorithms.
+
+Q3. Which function is used to change data types in Pandas?
+Ans:
+The `astype()` function.
+
+Q4. Which function converts a column to numeric values?
+Ans:
+`pd.to_numeric()`.
+
+Q5. Which function converts text to dates?
+Ans:
+`pd.to_datetime()`.
+
+Q6. How do you replace values in Pandas?
+Ans:
+Using the `replace()` function.
+
+Q7. Which function is commonly used to replace missing values?
+Ans:
+`fillna()`.
+
+-------------------------------------
+Quick Revision
+-------------------------------------
+
+✓ Data type conversion changes one data type into another.
+✓ Check data types using:
+  dataset.dtypes
+  dataset.info()
+✓ Change data type using:
+  astype()
+✓ Convert to numeric using:
+  pd.to_numeric()
+✓ Convert to datetime using:
+  pd.to_datetime()
+✓ Replace values using:
+  replace()
+✓ Replace missing values using:
+  fillna()
+✓ Correct data types improve data quality and Machine Learning performance.
+
+
+=====================================
+FUNCTION TRANSFORMER IN MACHINE LEARNING
+=====================================
+
+Definition
+----------
+Function Transformer is a preprocessing tool in Scikit-learn that applies a
+custom function to one or more features (columns) of a dataset.
+
+In simple words:
+"It allows you to transform data using your own function or a built-in Python
+function before training a Machine Learning model."
+
+Library
+-------
+from sklearn.preprocessing import FunctionTransformer
+
+-------------------------------------
+Why Do We Use Function Transformer?
+-------------------------------------
+
+• Apply mathematical transformations.
+• Reduce skewness in data.
+• Prepare data for Machine Learning.
+• Improve model performance.
+• Create custom preprocessing steps.
+
+-------------------------------------
+When Should We Use Function Transformer?
+-------------------------------------
+
+Use Function Transformer when you want to:
+
+✓ Apply Log Transformation
+✓ Apply Square Root Transformation
+✓ Apply Square Transformation
+✓ Apply Reciprocal Transformation
+✓ Create custom transformations
+
+-------------------------------------
+Syntax
+-------------------------------------
+
+from sklearn.preprocessing import FunctionTransformer
+
+transformer = FunctionTransformer(function_name)
+
+transformed_data = transformer.transform(data)
+
+-------------------------------------
+Example 1: Log Transformation
+-------------------------------------
+
+import numpy as np
+from sklearn.preprocessing import FunctionTransformer
+
+transformer = FunctionTransformer(np.log1p)
+
+new_data = transformer.fit_transform(dataset)
+
+Purpose:
+• Reduces right-skewed data.
+• Handles large values effectively.
+
+Example:
+
+Original:
+
+10
+100
+1000
+
+After Log Transformation:
+
+2.39
+4.61
+6.91
+
+-------------------------------------
+Example 2: Square Root Transformation
+-------------------------------------
+
+transformer = FunctionTransformer(np.sqrt)
+
+new_data = transformer.fit_transform(dataset)
+
+Example:
+
+Original:
+
+4
+9
+16
+
+After Transformation:
+
+2
+3
+4
+
+-------------------------------------
+Example 3: Square Transformation
+-------------------------------------
+
+transformer = FunctionTransformer(np.square)
+
+Example:
+
+Original:
+
+2
+3
+4
+
+After Transformation:
+
+4
+9
+16
+
+-------------------------------------
+Example 4: Reciprocal Transformation
+-------------------------------------
+
+transformer = FunctionTransformer(
+    lambda x: 1 / (x + 1)
+)
+
+Example:
+
+Original:
+
+1
+2
+4
+
+After Transformation:
+
+0.50
+0.33
+0.20
+
+-------------------------------------
+Example 5: Custom Function
+-------------------------------------
+
+def multiply_by_10(x):
+    return x * 10
+
+transformer = FunctionTransformer(
+    multiply_by_10
+)
+
+Example:
+
+Original:
+
+2
+5
+7
+
+After Transformation:
+
+20
+50
+70
+
+-------------------------------------
+Common Functions Used
+-------------------------------------
+
+Function            Purpose
+
+np.log1p()          Log transformation
+np.sqrt()           Square root
+np.square()         Square values
+np.reciprocal()     Reciprocal values
+lambda function     Custom transformation
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Easy to apply custom transformations.
+• Integrates with Scikit-learn Pipelines.
+• Improves preprocessing workflow.
+• Helps reduce skewness.
+• Reusable across projects.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Incorrect transformations can reduce model accuracy.
+• Some functions cannot handle negative values.
+• Requires understanding of the data distribution.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Suppose you have a Salary column:
+
+Salary
+
+20,000
+40,000
+8,00,000
+
+The data is highly right-skewed.
+
+Applying a Log Transformation using FunctionTransformer reduces the skewness,
+making the data more suitable for Machine Learning algorithms.
+
+-------------------------------------
+Interview Questions
+-------------------------------------
+
+Q1. What is Function Transformer?
+Ans:
+Function Transformer is a Scikit-learn preprocessing tool used to apply custom
+or built-in functions to transform data before model training.
+
+Q2. Why is Function Transformer used?
+Ans:
+It is used to apply mathematical or custom transformations to improve data quality
+and model performance.
+
+Q3. Which library provides Function Transformer?
+Ans:
+scikit-learn (`sklearn.preprocessing`).
+
+Q4. Name some functions commonly used with Function Transformer.
+Ans:
+• np.log1p()
+• np.sqrt()
+• np.square()
+• np.reciprocal()
+• Custom lambda functions
+
+Q5. Can Function Transformer be used in a Pipeline?
+Ans:
+Yes. It integrates seamlessly with Scikit-learn Pipelines.
+
+-------------------------------------
+Quick Revision
+-------------------------------------
+
+✓ Function Transformer applies custom functions to data.
+✓ Imported from:
+  sklearn.preprocessing
+✓ Used for mathematical transformations.
+✓ Common functions:
+  • np.log1p()
+  • np.sqrt()
+  • np.square()
+  • np.reciprocal()
+✓ Can use custom lambda functions.
+✓ Frequently used to reduce skewness and improve model performance.
+✓ Works well with Scikit-learn Pipelines.
+
+
+
+=====================================
+FEATURE SELECTION TECHNIQUES
+BACKWARD ELIMINATION & FORWARD SELECTION
+(Using MLxtend)
+=====================================
+
+Definition
+----------
+Feature Selection is the process of selecting the most important features
+(columns) from a dataset while removing unnecessary or irrelevant features.
+
+In simple words:
+"Feature Selection keeps only useful features that improve the Machine Learning
+model."
+
+-------------------------------------
+Why is Feature Selection Important?
+-------------------------------------
+
+• Improves model accuracy.
+• Reduces training time.
+• Removes irrelevant features.
+• Prevents overfitting.
+• Makes the model easier to understand.
+• Reduces memory usage.
+
+-------------------------------------
+Types of Feature Selection Methods
+-------------------------------------
+
+1. Filter Methods
+   • Correlation
+   • Chi-Square Test
+   • ANOVA
+
+2. Wrapper Methods
+   • Forward Selection
+   • Backward Elimination
+   • Recursive Feature Elimination (RFE)
+
+3. Embedded Methods
+   • Lasso Regression
+   • Ridge Regression
+   • Decision Tree Feature Importance
+
+-------------------------------------
+What is MLxtend?
+-------------------------------------
+
+MLxtend (Machine Learning Extensions) is a Python library that provides
+additional tools for Machine Learning, including feature selection algorithms.
+
+Installation:
+
+pip install mlxtend
+
+Import:
+
+from mlxtend.feature_selection import SequentialFeatureSelector
+
+-------------------------------------
+1. Forward Selection (Forward Elimination)
+-------------------------------------
+
+Definition
+----------
+Forward Selection starts with **no features** and adds one feature at a time.
+At each step, it selects the feature that improves the model performance the most.
+
+Working Steps
+-------------
+
+Step 1:
+Start with an empty feature set.
+
+↓
+
+Step 2:
+Train the model using each feature individually.
+
+↓
+
+Step 3:
+Select the feature with the best performance.
+
+↓
+
+Step 4:
+Add another feature that gives the greatest improvement.
+
+↓
+
+Step 5:
+Repeat until the desired number of features is selected or performance stops improving.
+
+Example
+-------
+
+Dataset Features:
+
+Age
+Salary
+Experience
+City
+
+Suppose the selected order is:
+
+Step 1 → Salary
+Step 2 → Salary + Experience
+Step 3 → Salary + Experience + Age
+
+City is not selected because it does not improve the model.
+
+-------------------------------------
+Python Example
+-------------------------------------
+
+from mlxtend.feature_selection import SequentialFeatureSelector
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+
+sfs = SequentialFeatureSelector(
+    model,
+    k_features=3,
+    forward=True,
+    floating=False,
+    scoring="r2",
+    cv=5
+)
+
+sfs.fit(X, y)
+
+Selected Features:
+
+sfs.k_feature_names_
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Faster than Backward Elimination when there are many features.
+• Avoids unnecessary computations.
+• Useful for large datasets.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• May miss the best combination of features.
+• Once a feature is added, it cannot be removed (in basic forward selection).
+
+=====================================
+2. Backward Elimination
+=====================================
+
+Definition
+----------
+Backward Elimination starts with **all features** and removes one feature at a time.
+At each step, it removes the least important feature until the desired number
+of features remains.
+
+Working Steps
+-------------
+
+Step 1:
+Start with all features.
+
+↓
+
+Step 2:
+Train the model.
+
+↓
+
+Step 3:
+Remove the feature that contributes the least.
+
+↓
+
+Step 4:
+Train the model again.
+
+↓
+
+Step 5:
+Repeat until only the important features remain.
+
+Example
+-------
+
+Dataset Features:
+
+Age
+Salary
+Experience
+City
+
+Initial:
+
+Age
+Salary
+Experience
+City
+
+↓
+
+Remove City
+
+↓
+
+Age
+Salary
+Experience
+
+↓
+
+Remove Age
+
+↓
+
+Salary
+Experience
+
+Final Selected Features:
+
+Salary
+Experience
+
+-------------------------------------
+Python Example
+-------------------------------------
+
+from mlxtend.feature_selection import SequentialFeatureSelector
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+
+sbs = SequentialFeatureSelector(
+    model,
+    k_features=2,
+    forward=False,
+   floating=False,
+    scoring="r2",
+    cv=5
+)
+
+sbs.fit(X, y)
+
+Selected Features:
+
+sbs.k_feature_names_
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Often finds better feature subsets.
+• Considers all features initially.
+• Good when the number of features is small.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Computationally expensive.
+• Slower for datasets with many features.
+
+=====================================
+Forward Selection vs Backward Elimination
+=====================================
+
+Feature Selection Direction
+
+Forward Selection
+• Starts with no features.
+• Adds one feature at a time.
+• Stops when enough useful features are selected.
+• Faster for high-dimensional datasets.
+
+Backward Elimination
+• Starts with all features.
+• Removes one feature at a time.
+• Stops when only important features remain.
+• Slower when there are many features.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Suppose you want to predict house prices.
+
+Available Features:
+
+• Area
+• Number of Rooms
+• Age of House
+• Parking
+• Owner Name
+
+Forward Selection may choose:
+
+✓ Area
+✓ Number of Rooms
+✓ Age of House
+
+Backward Elimination may remove:
+
+✗ Owner Name
+✗ Parking
+
+Both methods keep only the features that improve prediction.
+
+-------------------------------------
+Interview Questions
+-------------------------------------
+
+Q1. What is Feature Selection?
+Ans:
+Feature Selection is the process of selecting the most relevant features and
+removing unnecessary ones to improve model performance.
+
+Q2. What is Forward Selection?
+Ans:
+Forward Selection starts with no features and adds the most important feature
+at each step until the desired number of features is selected.
+
+Q3. What is Backward Elimination?
+Ans:
+Backward Elimination starts with all features and removes the least important
+feature one at a time.
+
+Q4. Which library provides Sequential Feature Selection?
+Ans:
+The MLxtend library (`mlxtend.feature_selection`).
+
+Q5. What is the difference between Forward Selection and Backward Elimination?
+Ans:
+Forward Selection starts with zero features and adds them one by one, whereas
+Backward Elimination starts with all features and removes them one by one.
+
+-------------------------------------
+Quick Revision
+-------------------------------------
+
+✓ Feature Selection removes unnecessary features.
+✓ Improves accuracy and reduces overfitting.
+✓ MLxtend provides `SequentialFeatureSelector`.
+✓ Forward Selection → Start with no features → Add features.
+✓ Backward Elimination → Start with all features → Remove features.
+✓ Forward Selection is generally faster for many features.
+✓ Backward Elimination is more computationally expensive but can find better feature subsets.
+
+
+=====================================
+TRAIN-TEST SPLIT IN MACHINE LEARNING
+=====================================
+
+Definition
+----------
+Train-Test Split is the process of dividing a dataset into two parts:
+
+1. Training Set
+2. Testing Set
+
+The Training Set is used to train the Machine Learning model, while the Testing
+Set is used to evaluate how well the trained model performs on unseen data.
+
+In simple words:
+"Train the model using one part of the data and test it using the remaining part."
+
+-------------------------------------
+Why Do We Use Train-Test Split?
+-------------------------------------
+
+• To evaluate model performance.
+• To check whether the model generalizes well.
+• To prevent overfitting.
+• To measure prediction accuracy on unseen data.
+• To simulate real-world predictions.
+
+-------------------------------------
+Dataset Splitting
+-------------------------------------
+
+Suppose you have 1000 records.
+
+Common Splits:
+
+80% Training  + 20% Testing
+70% Training  + 30% Testing
+75% Training  + 25% Testing
+90% Training  + 10% Testing
+
+Example (80:20)
+
+Total Data = 1000 Rows
+
+Training Data = 800 Rows
+
+Testing Data = 200 Rows
+
+-------------------------------------
+Training Set
+-------------------------------------
+
+Definition:
+The training set is the portion of the dataset used to teach the Machine Learning
+model.
+
+Purpose:
+• Learn patterns.
+• Learn relationships between features and target.
+• Build the prediction model.
+
+Example:
+
+Study Hours → Marks
+
+The model learns how study hours affect marks.
+
+-------------------------------------
+Testing Set
+-------------------------------------
+
+Definition:
+The testing set is the portion of the dataset used only after training to
+evaluate the model's performance.
+
+Purpose:
+• Measure accuracy.
+• Check prediction performance.
+• Evaluate generalization.
+
+The testing data should never be used for training.
+
+-------------------------------------
+Python Implementation
+-------------------------------------
+
+Import Library
+
+from sklearn.model_selection import train_test_split
+
+-------------------------------------
+
+Syntax
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+-------------------------------------
+Meaning of Parameters
+-------------------------------------
+
+X
+→ Independent Variables (Features)
+
+y
+→ Dependent Variable (Target)
+
+test_size=0.2
+→ 20% of the data is used for testing.
+→ Remaining 80% is used for training.
+
+random_state=42
+→ Ensures the split is reproducible.
+→ Every time you run the code with the same random_state, you get the same split.
+
+-------------------------------------
+Example
+-------------------------------------
+
+Dataset
+
+Age   Salary   Purchased
+
+22    25000    Yes
+30    40000    No
+35    50000    Yes
+28    35000    No
+40    60000    Yes
+
+Suppose:
+
+Training Set (80%)
+
+Age   Salary   Purchased
+
+22    25000    Yes
+30    40000    No
+35    50000    Yes
+28    35000    No
+
+Testing Set (20%)
+
+Age   Salary   Purchased
+
+40    60000    Yes
+
+The model trains on the first four rows and predicts the outcome for the last row.
+
+-------------------------------------
+Workflow
+-------------------------------------
+
+Collect Dataset
+      ↓
+Data Cleaning
+      ↓
+Feature Selection
+      ↓
+Train-Test Split
+      ↓
+Train the Model
+      ↓
+Test the Model
+      ↓
+Evaluate Performance
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Helps evaluate model performance.
+• Prevents overfitting.
+• Tests the model on unseen data.
+• Easy to implement.
+• Widely used in Machine Learning.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Results depend on how the data is split.
+• Small datasets may not provide enough training or testing samples.
+• A single split may not represent the entire dataset well.
+
+-------------------------------------
+Best Practices
+-------------------------------------
+
+✓ Shuffle the data before splitting (default behavior in train_test_split).
+✓ Use random_state for reproducible results.
+✓ Apply feature scaling after splitting to avoid data leakage.
+✓ Train only on the training data.
+✓ Test only on the testing data.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Suppose you want to predict whether a customer will buy a product.
+
+Total customer records = 10,000
+
+• Train the model using 8,000 records (80%).
+• Test the model using 2,000 records (20%).
+
+If the model performs well on the test data, it is more likely to perform well
+on new customers.
+
+-------------------------------------
+Interview Questions
+-------------------------------------
+
+Q1. What is Train-Test Split?
+Ans:
+Train-Test Split is the process of dividing a dataset into training and testing
+sets to train and evaluate a Machine Learning model.
+
+Q2. Why is Train-Test Split important?
+Ans:
+It helps measure how well the model performs on unseen data and prevents overfitting.
+
+Q3. Which function is used for Train-Test Split in Scikit-learn?
+Ans:
+train_test_split() from sklearn.model_selection.
+
+Q4. What does test_size=0.2 mean?
+Ans:
+20% of the dataset is used for testing, and the remaining 80% is used for training.
+
+Q5. What is the purpose of random_state?
+Ans:
+It ensures the data split is reproducible. Using the same random_state gives the same train-test split every time.
+
+Q6. Should feature scaling be done before or after Train-Test Split?
+Ans:
+Feature scaling should be done **after** Train-Test Split. Fit the scaler on the training data and then transform both the training and testing data to prevent data leakage.
+
+-------------------------------------
+Quick Revision
+-------------------------------------
+
+✓ Train-Test Split divides the dataset into training and testing sets.
+✓ Training Set → Used to train the model.
+✓ Testing Set → Used to evaluate the model.
+✓ Common split ratios: 80:20, 70:30, 75:25.
+✓ Function:
+  train_test_split()
+✓ test_size → Percentage of test data.
+✓ random_state → Reproducible data split.
+✓ Perform Train-Test Split before feature scaling and model training.
+
+
+
+=====================================
+REGRESSION ANALYSIS
+=====================================
+
+Definition
+----------
+Regression Analysis is a supervised Machine Learning technique used to predict
+a continuous (numerical) value based on one or more independent variables.
+
+In simple words:
+"Regression predicts numerical values."
+
+Examples:
+• Predict House Price
+• Predict Salary
+• Predict Temperature
+• Predict Sales
+• Predict Stock Price (with limitations)
+
+-------------------------------------
+Key Terms
+-------------------------------------
+
+Independent Variable (X)
+→ Input feature(s)
+
+Dependent Variable (Y)
+→ Output/Target value
+
+Example:
+
+Experience (X) → Salary (Y)
+
+-------------------------------------
+Types of Regression
+-------------------------------------
+
+1. Simple Linear Regression
+2. Multiple Linear Regression
+3. Polynomial Regression
+4. Ridge Regression
+5. Lasso Regression
+6. Elastic Net Regression
+
+In this chapter, we focus on:
+✓ Simple Linear Regression
+✓ Multiple Linear Regression
+✓ Polynomial Regression
+
+-------------------------------------
+Assumptions of Linear Regression
+-------------------------------------
+
+• Linear relationship between X and Y.
+• Independent observations.
+• No multicollinearity (for multiple regression).
+• Constant variance of errors (Homoscedasticity).
+• Errors are approximately normally distributed.
+
+-------------------------------------
+Applications
+-------------------------------------
+
+• House Price Prediction
+• Salary Prediction
+• Sales Forecasting
+• Demand Forecasting
+• Medical Cost Prediction
+
+=====================================
+SIMPLE LINEAR REGRESSION
+=====================================
+
+Definition
+----------
+Simple Linear Regression predicts the value of one dependent variable using
+only one independent variable.
+
+In simple words:
+"One input predicts one output."
+
+Example:
+
+Experience → Salary
+
+-------------------------------------
+Formula
+-------------------------------------
+
+Y = mX + c
+
+Where:
+
+Y = Predicted value
+
+X = Independent Variable
+
+m = Slope (Coefficient)
+
+c = Intercept
+
+-------------------------------------
+Meaning of Formula
+-------------------------------------
+
+m
+→ Shows how much Y changes when X increases by one unit.
+
+c
+→ Value of Y when X = 0.
+
+-------------------------------------
+Graph
+-------------------------------------
+
+          Y
+          ↑
+Salary    ●
+        ●
+      ●
+    ●
+  ●
+----------------------------→ X
+        Experience
+
+The straight line is called the Regression Line.
+
+-------------------------------------
+Python Example
+-------------------------------------
+
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+
+model.fit(X_train, y_train)
+
+prediction = model.predict(X_test)
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Simple and easy to understand.
+• Fast to train.
+• Easy to interpret.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Works only for linear relationships.
+• Sensitive to outliers.
+• Cannot model complex patterns.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Experience (Years)
+
+1 → ₹20,000
+2 → ₹25,000
+3 → ₹30,000
+
+The model learns the relationship between experience and salary.
+
+=====================================
+MULTIPLE LINEAR REGRESSION
+=====================================
+
+Definition
+----------
+Multiple Linear Regression predicts the dependent variable using two or more
+independent variables.
+
+In simple words:
+"Multiple inputs predict one output."
+
+Example:
+
+House Price depends on:
+
+✓ Area
+✓ Bedrooms
+✓ Location
+✓ Age of House
+
+-------------------------------------
+Formula
+-------------------------------------
+
+Y = b0 + b1X1 + b2X2 + b3X3 + ... + bnXn
+
+Where:
+
+Y = Predicted value
+
+b0 = Intercept
+
+b1, b2, ... = Coefficients
+
+X1, X2, ... = Independent Variables
+
+-------------------------------------
+Python Example
+-------------------------------------
+
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+
+model.fit(X_train, y_train)
+
+prediction = model.predict(X_test)
+
+(The code is almost the same as Simple Linear Regression; only X contains
+multiple features.)
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• More accurate when multiple factors affect the output.
+• Uses more information from the dataset.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Can suffer from multicollinearity.
+• Harder to interpret than simple regression.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Predict House Price using:
+
+Area
+Bedrooms
+Bathrooms
+Parking
+Location
+
+=====================================
+POLYNOMIAL REGRESSION
+=====================================
+
+Definition
+----------
+Polynomial Regression is used when the relationship between X and Y is curved
+(non-linear), but it is still modeled using linear regression on transformed
+(polynomial) features.
+
+In simple words:
+"It fits a curve instead of a straight line."
+
+-------------------------------------
+Formula
+-------------------------------------
+
+Y = b0 + b1X + b2X² + b3X³ + ...
+
+-------------------------------------
+Graph
+-------------------------------------
+
+Simple Linear Regression
+
+Y
+↑
+│      ●
+│    ●
+│  ●
+│●
+└────────────→ X
+
+Polynomial Regression
+
+Y
+↑
+│        ●
+│      ●
+│   ●
+│ ●
+│●
+└────────────→ X
+
+(Curved relationship)
+
+-------------------------------------
+Python Example
+-------------------------------------
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+
+poly = PolynomialFeatures(degree=2)
+
+X_poly = poly.fit_transform(X)
+
+model = LinearRegression()
+
+model.fit(X_poly, y)
+
+-------------------------------------
+Advantages
+-------------------------------------
+
+• Captures curved relationships.
+• More flexible than simple linear regression.
+• Can improve prediction accuracy for non-linear data.
+
+-------------------------------------
+Disadvantages
+-------------------------------------
+
+• Can overfit if the degree is too high.
+• More computationally expensive.
+• Harder to interpret.
+
+-------------------------------------
+Real-Life Example
+-------------------------------------
+
+Predicting:
+
+Study Hours → Marks
+
+Initially, marks increase quickly, but after many hours of study, the increase
+may slow down. A curved model can represent this relationship better.
+
+=====================================
+COMPARISON
+=====================================
+
+Simple Linear Regression
+
+• One independent variable.
+• Straight-line relationship.
+• Formula: Y = mX + c
+
+-------------------------------------
+
+Multiple Linear Regression
+
+• Two or more independent variables.
+• Straight-line relationship.
+• Formula:
+  Y = b0 + b1X1 + b2X2 + ...
+
+-------------------------------------
+
+Polynomial Regression
+
+• One or more variables.
+• Curved relationship.
+• Uses polynomial features such as X², X³.
+
+=====================================
+MODEL EVALUATION
+=====================================
+
+Common Metrics
+
+1. R² Score
+------------
+Measures how well the model explains the variation in the target variable.
+
+Range:
+0 to 1
+
+Higher value = Better model
+
+-------------------------------------
+
+2. Mean Absolute Error (MAE)
+-----------------------------
+Average absolute difference between actual and predicted values.
+
+Lower value = Better model
+
+-------------------------------------
+
+3. Mean Squared Error (MSE)
+----------------------------
+Average squared error.
+
+Lower value = Better model
+
+-------------------------------------
+
+4. Root Mean Squared Error (RMSE)
+----------------------------------
+Square root of MSE.
+
+Lower value = Better model
+
+=====================================
+Interview Questions
+=====================================
+
+Q1. What is Regression Analysis?
+Ans:
+Regression Analysis is a supervised learning technique used to predict continuous numerical values.
+
+Q2. What is the difference between Simple and Multiple Linear Regression?
+Ans:
+Simple Linear Regression uses one independent variable, whereas Multiple Linear Regression uses two or more independent variables.
+
+Q3. What is the equation of Simple Linear Regression?
+Ans:
+Y = mX + c
+
+Q4. When should Polynomial Regression be used?
+Ans:
+When the relationship between the independent and dependent variables is non-linear (curved).
+
+Q5. Name some evaluation metrics for regression.
+Ans:
+• R² Score
+• MAE
+• MSE
+• RMSE
+
+Q6. Is Regression a Supervised Learning algorithm?
+Ans:
+Yes. Regression learns from labeled data to predict continuous values.
+
+=====================================
+Quick Revision
+=====================================
+
+✓ Regression predicts continuous numerical values.
+✓ Simple Linear Regression → One input, one output.
+✓ Formula: Y = mX + c.
+✓ Multiple Linear Regression → Multiple inputs, one output.
+✓ Polynomial Regression → Fits curved relationships.
+✓ Regression is used for price, salary, sales, and demand prediction.
+✓ Common metrics: R² Score, MAE, MSE, RMSE.
+✓ Linear Regression works best when the relationship between variables is approximately linear.
