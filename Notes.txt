@@ -3148,3 +3148,1055 @@ Quick Revision
 ✓ Regression is used for price, salary, sales, and demand prediction.
 ✓ Common metrics: R² Score, MAE, MSE, RMSE.
 ✓ Linear Regression works best when the relationship between variables is approximately linear.
+
+Regression Cost Function - R Squared score & Adjusted R Squared Regression Analysis
+
+=============================================
+REGRESSION COST FUNCTION
+R² SCORE & ADJUSTED R²
+REGRESSION ANALYSIS
+=============================================
+
+1. REGRESSION COST FUNCTION
+=============================================
+
+Definition
+----------
+A Regression Cost Function measures the difference between the actual values
+and the predicted values produced by a regression model.
+
+In simple words:
+
+"Cost Function tells us how much error the regression model is making."
+
+Goal:
+------
+Minimize the Cost Function.
+
+Lower Error → Better Model
+Higher Error → Poorer Model
+
+---------------------------------------------
+MEAN SQUARED ERROR (MSE)
+---------------------------------------------
+
+MSE is one of the most commonly used cost/loss functions for regression.
+
+Formula:
+
+MSE = (1/n) Σ(yᵢ - ŷᵢ)²
+
+Where:
+
+n  = Number of observations
+yᵢ = Actual value
+ŷᵢ = Predicted value
+
+Why do we square the error?
+
+Because:
+• Negative and positive errors should not cancel each other.
+• Large errors receive a larger penalty.
+
+Example:
+
+Actual:     10, 20, 30
+Predicted:  12, 18, 33
+
+Errors:
+2, -2, 3
+
+Squared Errors:
+4, 4, 9
+
+MSE = (4 + 4 + 9) / 3
+    = 17 / 3
+    ≈ 5.67
+
+Lower MSE → Better predictions.
+
+---------------------------------------------
+OTHER REGRESSION ERROR METRICS
+---------------------------------------------
+
+1. MAE (Mean Absolute Error)
+
+MAE = (1/n) Σ|yᵢ - ŷᵢ|
+
+Measures the average absolute difference between actual and predicted values.
+
+Lower MAE → Better model.
+
+MAE is generally less sensitive to outliers than MSE.
+
+---------------------------------------------
+
+2. RMSE (Root Mean Squared Error)
+
+RMSE = √MSE
+
+RMSE is useful because its units are the same as the target variable.
+
+Example:
+
+If the target is Salary in rupees,
+RMSE is also expressed in rupees.
+
+Lower RMSE → Better model.
+
+=============================================
+2. R-SQUARED (R²) SCORE
+=============================================
+
+Definition
+----------
+R² (R-Squared), also called the coefficient of determination, measures how much
+of the variation in the dependent variable is explained by the regression model.
+
+In simple words:
+
+"R² tells us how well the model explains the variation in the target variable."
+
+---------------------------------------------
+Formula
+---------------------------------------------
+
+R² = 1 - (SS_res / SS_tot)
+
+Where:
+
+SS_res = Sum of Squared Residuals
+SS_tot = Total Sum of Squares
+
+---------------------------------------------
+Range of R²
+---------------------------------------------
+
+R² is usually between 0 and 1 for many standard regression situations.
+
+R² = 1
+→ Perfect prediction.
+
+R² = 0
+→ Model explains none of the target's variation relative to the baseline
+   mean prediction.
+
+R² can also be negative.
+→ The model can perform worse than simply predicting the mean.
+
+---------------------------------------------
+Example
+---------------------------------------------
+
+Suppose:
+
+R² = 0.80
+
+This means the model explains approximately 80% of the variation in the
+dependent variable relative to the mean baseline.
+
+It does NOT mean that the model is "80% accurate."
+
+---------------------------------------------
+Interpretation
+---------------------------------------------
+
+R² = 0.90
+→ Very strong explanatory fit in many contexts.
+
+R² = 0.70
+→ Model explains about 70% of the variation.
+
+R² = 0.30
+→ Model explains about 30% of the variation.
+
+Important:
+There is no universal "good R²" value. A suitable value depends on the
+problem, data, domain, and noise level.
+
+=============================================
+3. ADJUSTED R-SQUARED
+=============================================
+
+Definition
+----------
+Adjusted R² is a modified version of R² that takes the number of predictors
+in the model into account.
+
+It is especially useful for Multiple Linear Regression.
+
+Why?
+
+Regular R² can increase or stay the same when additional features are added,
+even if those features do not meaningfully improve the model.
+
+Adjusted R² adds a penalty for unnecessary predictors.
+
+---------------------------------------------
+Formula
+---------------------------------------------
+
+Adjusted R² =
+1 - [(1 - R²)(n - 1) / (n - p - 1)]
+
+Where:
+
+R² = R-Squared
+n  = Number of observations
+p  = Number of predictors/features
+
+---------------------------------------------
+Example
+---------------------------------------------
+
+Model 1:
+
+Features:
+• Experience
+• Education
+
+R² = 0.80
+Adjusted R² = 0.78
+
+Model 2:
+
+Features:
+• Experience
+• Education
+• Random Feature
+• Unimportant Feature
+
+R² = 0.82
+Adjusted R² = 0.75
+
+Although R² increased:
+
+0.80 → 0.82
+
+Adjusted R² decreased:
+
+0.78 → 0.75
+
+This suggests that the additional features did not provide enough useful
+information to justify their inclusion.
+
+=============================================
+R² VS ADJUSTED R²
+=============================================
+
+R²
+--
+• Measures explained variation.
+• Does not penalize adding predictors.
+• Can increase when features are added.
+• Useful for understanding model fit.
+
+Adjusted R²
+-----------
+• Accounts for the number of predictors.
+• Penalizes unnecessary features.
+• Can decrease when irrelevant features are added.
+• Particularly useful for multiple regression.
+
+---------------------------------------------
+Comparison Table
+---------------------------------------------
+
+Metric          Purpose
+
+MSE             Measures average squared error
+MAE             Measures average absolute error
+RMSE            Measures error in target's units
+R²              Measures explained variation
+Adjusted R²     R² adjusted for number of predictors
+
+---------------------------------------------
+Python Implementation
+---------------------------------------------
+
+from sklearn.metrics import (
+    mean_squared_error,
+    mean_absolute_error,
+    r2_score
+)
+
+mse = mean_squared_error(y_test, y_pred)
+
+mae = mean_absolute_error(y_test, y_pred)
+
+rmse = mean_squared_error(
+    y_test,
+    y_pred,
+    squared=False
+)
+
+r2 = r2_score(y_test, y_pred)
+
+---------------------------------------------
+Adjusted R² in Python
+---------------------------------------------
+
+n = X_test.shape[0]
+p = X_test.shape[1]
+
+adjusted_r2 = 1 - (
+    (1 - r2) * (n - 1) / (n - p - 1)
+)
+
+Note:
+The formula assumes that n > p + 1.
+
+=============================================
+REGRESSION MODEL EVALUATION
+=============================================
+
+Dataset
+   ↓
+Train-Test Split
+   ↓
+Train Regression Model
+   ↓
+Predict on Test Data
+   ↓
+Calculate Errors
+   ↓
+MSE / MAE / RMSE
+   ↓
+Calculate R²
+   ↓
+Calculate Adjusted R²
+   ↓
+Evaluate Model
+
+=============================================
+IMPORTANT DIFFERENCE
+=============================================
+
+Cost Function vs R²
+
+Cost Function:
+→ Measures prediction error.
+→ Lower is generally better.
+
+R²:
+→ Measures explained variation.
+→ Higher is generally better.
+
+Adjusted R²:
+→ Measures explained variation while considering the number of predictors.
+→ Higher is generally better when comparing models on the same target/data setup.
+
+=============================================
+INTERVIEW QUESTIONS
+=============================================
+
+Q1. What is R² Score?
+
+Ans:
+R², or R-Squared, measures the proportion of variation in the dependent
+variable explained by the regression model relative to a mean-only baseline.
+
+---------------------------------------------
+
+Q2. Is R² the same as accuracy?
+
+Ans:
+No. R² is not the same as classification accuracy. It measures explained
+variation in a regression problem.
+
+---------------------------------------------
+
+Q3. What happens to R² when we add a new feature?
+
+Ans:
+R² cannot decrease simply because a predictor is added to an ordinary
+least-squares model. It may increase even if the new feature is not useful.
+
+---------------------------------------------
+
+Q4. Why do we use Adjusted R²?
+
+Ans:
+Adjusted R² accounts for the number of predictors and penalizes unnecessary
+features, making it more useful for comparing multiple regression models.
+
+---------------------------------------------
+
+Q5. What is the difference between R² and Adjusted R²?
+
+Ans:
+R² measures explained variation without a penalty for the number of predictors.
+Adjusted R² includes a penalty based on the number of predictors.
+
+---------------------------------------------
+
+Q6. Which is better: Higher or Lower R²?
+
+Ans:
+Generally, higher R² indicates that the model explains more variation.
+However, R² alone should not be used to decide whether a model is good.
+
+---------------------------------------------
+
+Q7. Which is better: Higher or Lower MSE?
+
+Ans:
+Lower MSE is better because it means the model has smaller squared prediction
+errors.
+
+=============================================
+QUICK REVISION
+=============================================
+
+✓ MSE → Average squared error.
+✓ MAE → Average absolute error.
+✓ RMSE → Square root of MSE.
+✓ R² → Measures explained variation.
+✓ Higher R² → Generally better explanatory fit.
+✓ R² is NOT classification accuracy.
+✓ R² can increase when predictors are added.
+✓ Adjusted R² penalizes unnecessary predictors.
+✓ Adjusted R² is especially useful in Multiple Linear Regression.
+✓ Lower MSE/MAE/RMSE → Generally better.
+✓ Higher R²/Adjusted R² → Generally better, when comparing appropriate models.
+
+=========================================
+HOW TO FIND THE BEST FIT LINE?
+=========================================
+
+Definition
+----------
+A Best Fit Line is a straight line that represents the relationship between
+the independent variable (X) and dependent variable (Y) as closely as possible.
+
+In simple words:
+
+"Best Fit Line is the line that minimizes the overall prediction error."
+
+For Linear Regression:
+
+Y = mX + c
+
+Where:
+
+Y = Predicted value
+X = Independent variable
+m = Slope
+c = Intercept
+
+-----------------------------------------
+Example
+-----------------------------------------
+
+Suppose we have:
+
+Experience    Salary
+
+1             20,000
+2             25,000
+3             30,000
+4             35,000
+5             40,000
+
+The model tries to find a line that passes as close as possible to these
+data points.
+
+-----------------------------------------
+How Does Linear Regression Find It?
+-----------------------------------------
+
+Step 1:
+Take the training data.
+
+        ↓
+
+Step 2:
+Assume a line:
+
+Y = mX + c
+
+        ↓
+
+Step 3:
+Calculate predicted values.
+
+        ↓
+
+Step 4:
+Calculate the errors:
+
+Error = Actual Value - Predicted Value
+
+        ↓
+
+Step 5:
+Calculate the Cost Function, commonly MSE.
+
+        ↓
+
+Step 6:
+Find the values of m and c that minimize the cost.
+
+        ↓
+
+Best Fit Line
+
+-----------------------------------------
+Method 1: Ordinary Least Squares (OLS)
+-----------------------------------------
+
+Linear Regression commonly finds the coefficients by minimizing the
+sum of squared residuals.
+
+Residual:
+
+Residual = Actual Value - Predicted Value
+
+Objective:
+
+Minimize:
+
+Σ(yᵢ - ŷᵢ)²
+
+This is called the Least Squares method.
+
+-----------------------------------------
+Method 2: Gradient Descent
+-----------------------------------------
+
+Gradient Descent is an optimization algorithm that can be used to minimize
+the cost function.
+
+Process:
+
+Initialize parameters
+       ↓
+Calculate predictions
+       ↓
+Calculate Cost
+       ↓
+Calculate Gradient
+       ↓
+Update parameters
+       ↓
+Calculate Cost again
+       ↓
+Repeat
+       ↓
+Minimum Cost
+       ↓
+Best Fit Line
+
+Parameter update:
+
+θ = θ - α × Gradient
+
+Where:
+
+θ = Model parameter
+α = Learning Rate
+
+-----------------------------------------
+How Do We Know the Line is Good?
+-----------------------------------------
+
+We can use regression evaluation metrics:
+
+✓ MSE
+✓ MAE
+✓ RMSE
+✓ R² Score
+✓ Adjusted R²
+
+For error metrics:
+
+Lower → Better
+
+For R²:
+
+Higher → Generally better explanatory fit.
+
+-----------------------------------------
+IMPORTANT
+-----------------------------------------
+
+The Best Fit Line is NOT necessarily a line that passes through every point.
+
+It is the line that gives the best overall fit according to the chosen
+optimization criterion.
+
+=========================================
+L1 REGULARIZATION — LASSO
+=========================================
+
+Definition
+----------
+L1 Regularization, commonly called Lasso Regression, is a regularization
+technique that adds a penalty based on the absolute values of model
+coefficients.
+
+In simple words:
+
+"Lasso reduces the importance of unnecessary features and can make some
+coefficients exactly zero."
+
+-----------------------------------------
+Why Do We Need Regularization?
+-----------------------------------------
+
+A model with too many features can become overly complex and may overfit
+the training data.
+
+Regularization adds a penalty to discourage overly large coefficients.
+
+Goal:
+
+Reduce Overfitting
+       ↓
+Improve Generalization
+       ↓
+Better Performance on Unseen Data
+
+-----------------------------------------
+L1 Penalty
+-----------------------------------------
+
+L1 penalty:
+
+λ Σ|βⱼ|
+
+Lasso objective can be written as:
+
+Loss + λ Σ|βⱼ|
+
+Where:
+
+λ = Regularization strength
+βⱼ = Model coefficients
+
+-----------------------------------------
+Important Property of L1
+-----------------------------------------
+
+L1 can make some coefficients exactly:
+
+β = 0
+
+Therefore, Lasso can perform:
+
+Feature Selection
+
+Example:
+
+Feature          Coefficient
+
+Age              0.52
+Experience        0.81
+City              0.00
+Department        0.00
+Salary            1.25
+
+City and Department have coefficients of zero.
+
+They are effectively removed from the model.
+
+-----------------------------------------
+Python Example
+-----------------------------------------
+
+from sklearn.linear_model import Lasso
+
+model = Lasso(alpha=0.1)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+-----------------------------------------
+Important Parameter
+-----------------------------------------
+
+alpha
+
+Controls the strength of regularization.
+
+Higher alpha:
+→ Stronger penalty
+→ More coefficients may become zero
+→ Can cause underfitting if too large
+
+Lower alpha:
+→ Weaker penalty
+→ More closely resembles ordinary linear regression
+
+=========================================
+L2 REGULARIZATION — RIDGE
+=========================================
+
+Definition
+----------
+L2 Regularization, commonly called Ridge Regression, adds a penalty based on
+the squared values of the model coefficients.
+
+In simple words:
+
+"Ridge reduces large coefficients but usually does not make them exactly zero."
+
+-----------------------------------------
+L2 Penalty
+-----------------------------------------
+
+L2 penalty:
+
+λ Σβⱼ²
+
+Ridge objective:
+
+Loss + λ Σβⱼ²
+
+-----------------------------------------
+Example
+-----------------------------------------
+
+Before Ridge:
+
+Age          = 10.5
+Experience   = 20.8
+Salary       = 35.6
+
+After Ridge:
+
+Age          = 7.2
+Experience   = 14.3
+Salary       = 25.1
+
+The coefficients become smaller.
+
+But normally they do not become exactly zero.
+
+-----------------------------------------
+Python Example
+-----------------------------------------
+
+from sklearn.linear_model import Ridge
+
+model = Ridge(alpha=1.0)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+=========================================
+L1 VS L2 REGULARIZATION
+=========================================
+
+L1 — Lasso
+
+Penalty:
+Σ|β|
+
+Effect:
+Can make coefficients exactly zero.
+
+Main Benefit:
+Feature Selection.
+
+-----------------------------------------
+
+L2 — Ridge
+
+Penalty:
+Σβ²
+
+Effect:
+Shrinks coefficients toward zero.
+
+Main Benefit:
+Controls large coefficients and helps with multicollinearity.
+
+=========================================
+LASSO VS RIDGE
+=========================================
+
+Feature Selection
+
+Lasso:
+✓ Yes
+
+Ridge:
+✗ Usually no
+
+-----------------------------------------
+
+Coefficient Behavior
+
+Lasso:
+Some coefficients can become exactly zero.
+
+Ridge:
+Coefficients become smaller but generally remain non-zero.
+
+-----------------------------------------
+
+Penalty
+
+Lasso:
+Absolute value of coefficients.
+
+Ridge:
+Square of coefficients.
+
+-----------------------------------------
+
+Useful When
+
+Lasso:
+Many features may be irrelevant.
+
+Ridge:
+Many features contribute and may be correlated.
+
+=========================================
+ELASTIC NET
+=========================================
+
+Elastic Net combines L1 and L2 regularization.
+
+Formula concept:
+
+Loss + λ₁Σ|βⱼ| + λ₂Σβⱼ²
+
+It combines:
+
+Lasso + Ridge
+
+Useful when:
+• There are many features.
+• Features are correlated.
+• Feature selection is also useful.
+
+Python:
+
+from sklearn.linear_model import ElasticNet
+
+model = ElasticNet(
+    alpha=0.1,
+    l1_ratio=0.5
+)
+
+=========================================
+WHY FEATURE SCALING IS IMPORTANT
+=========================================
+
+Regularization penalizes coefficients.
+
+Therefore, features should generally be on comparable scales before applying
+Lasso or Ridge.
+
+Example:
+
+Age         → 20–60
+Salary      → 20,000–2,00,000
+
+Without scaling, the coefficient magnitudes can be affected by the units
+of measurement.
+
+Recommended workflow:
+
+Data
+ ↓
+Train-Test Split
+ ↓
+Feature Scaling
+ ↓
+Lasso / Ridge
+ ↓
+Prediction
+ ↓
+Evaluation
+
+=========================================
+PRACTICAL EXAMPLE
+=========================================
+
+Suppose we want to predict Salary using:
+
+Age
+Experience
+Education
+City
+Company Rating
+
+Ordinary Linear Regression:
+
+All features are included.
+
+        ↓
+
+Lasso:
+
+City coefficient → 0
+
+Therefore:
+
+City is effectively removed.
+
+        ↓
+
+Ridge:
+
+All coefficients remain, but large coefficients are reduced.
+
+=========================================
+REGULARIZATION AND OVERFITTING
+=========================================
+
+Without Regularization:
+
+Training Error → Very Low
+Testing Error  → High
+
+Possible Overfitting
+
+With Appropriate Regularization:
+
+Training Error → Slightly Higher
+Testing Error  → Lower
+
+Better Generalization
+
+Important:
+Too much regularization can cause underfitting.
+
+=========================================
+L1 & L2 PRACTICAL WORKFLOW
+=========================================
+
+Step 1:
+Import libraries.
+
+from sklearn.linear_model import Lasso, Ridge
+
+Step 2:
+Split the dataset.
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+
+Step 3:
+Scale features when appropriate.
+
+Step 4:
+Create the model.
+
+Lasso:
+
+model = Lasso(alpha=0.1)
+
+Ridge:
+
+model = Ridge(alpha=1.0)
+
+Step 5:
+Train:
+
+model.fit(X_train, y_train)
+
+Step 6:
+Predict:
+
+y_pred = model.predict(X_test)
+
+Step 7:
+Evaluate:
+
+r2_score(y_test, y_pred)
+
+=========================================
+INTERVIEW QUESTIONS
+=========================================
+
+Q1. What is a Best Fit Line?
+
+Ans:
+A Best Fit Line is the line that represents the relationship between variables
+while minimizing the overall prediction error according to a chosen criterion.
+
+-----------------------------------------
+
+Q2. How does Linear Regression find the Best Fit Line?
+
+Ans:
+It estimates the model coefficients by minimizing a loss such as the sum of
+squared errors. Ordinary Least Squares is the standard analytical approach,
+while Gradient Descent can also be used as an optimization method.
+
+-----------------------------------------
+
+Q3. What is Regularization?
+
+Ans:
+Regularization is a technique that adds a penalty to the model objective to
+reduce model complexity and help prevent overfitting.
+
+-----------------------------------------
+
+Q4. What is L1 Regularization?
+
+Ans:
+L1 Regularization adds a penalty based on the absolute values of coefficients
+and can make some coefficients exactly zero.
+
+-----------------------------------------
+
+Q5. What is L2 Regularization?
+
+Ans:
+L2 Regularization adds a penalty based on the squared values of coefficients
+and shrinks them toward zero.
+
+-----------------------------------------
+
+Q6. Which regularization technique performs feature selection?
+
+Ans:
+L1 Regularization (Lasso), because it can make coefficients exactly zero.
+
+-----------------------------------------
+
+Q7. What happens when alpha increases?
+
+Ans:
+Regularization becomes stronger. Coefficients are more heavily penalized,
+which can reduce overfitting but may cause underfitting if alpha is too large.
+
+-----------------------------------------
+
+Q8. Why should we scale features before Lasso or Ridge?
+
+Ans:
+Because regularization penalizes coefficient magnitudes, and different feature
+scales can make the penalty uneven across features.
+
+=========================================
+QUICK REVISION
+=========================================
+
+✓ Best Fit Line → Best overall line for the data.
+✓ Linear Regression → Y = mX + c.
+✓ Least Squares → Minimizes squared residuals.
+✓ Gradient Descent → Optimization method for minimizing cost.
+✓ Regularization → Controls model complexity.
+✓ L1 = Lasso.
+✓ L2 = Ridge.
+✓ Lasso → Can make coefficients exactly zero.
+✓ Ridge → Shrinks coefficients toward zero.
+✓ Lasso → Useful for feature selection.
+✓ Ridge → Useful for controlling large coefficients and correlated features.
+✓ Elastic Net → Combination of L1 + L2.
+✓ alpha → Controls regularization strength.
+✓ Too much regularization → Underfitting.
+✓ Feature scaling is generally important before Lasso/Ridge.
