@@ -4200,3 +4200,1151 @@ QUICK REVISION
 ✓ alpha → Controls regularization strength.
 ✓ Too much regularization → Underfitting.
 ✓ Feature scaling is generally important before Lasso/Ridge.
+
+
+========================================================
+CLASSIFICATION IN MACHINE LEARNING
+========================================================
+
+Definition
+----------
+Classification is a Supervised Machine Learning technique used to predict
+a categorical class or category.
+
+In simple words:
+
+"Classification predicts which class/category an observation belongs to."
+
+Examples:
+
+Email → Spam / Not Spam
+Patient → Disease / No Disease
+Transaction → Fraud / Not Fraud
+Student → Pass / Fail
+Image → Cat / Dog
+
+--------------------------------------------------------
+REGRESSION vs CLASSIFICATION
+--------------------------------------------------------
+
+Regression:
+→ Predicts continuous numerical values.
+
+Example:
+House Price = ₹50,00,000
+
+Classification:
+→ Predicts categories/classes.
+
+Example:
+House = Expensive / Cheap
+
+--------------------------------------------------------
+TYPES OF CLASSIFICATION
+--------------------------------------------------------
+
+1. Binary Classification
+------------------------
+Only TWO classes.
+
+Examples:
+
+Spam / Not Spam
+Yes / No
+0 / 1
+Disease / No Disease
+
+--------------------------------------------------------
+
+2. Multiclass Classification
+----------------------------
+More than TWO classes.
+
+Example:
+
+Animal:
+Cat
+Dog
+Horse
+
+or
+
+Digit:
+0
+1
+2
+3
+...
+9
+
+--------------------------------------------------------
+
+3. Multilabel Classification
+----------------------------
+One observation can belong to multiple classes.
+
+Example:
+
+A movie can be:
+
+Action
+Comedy
+Drama
+
+at the same time.
+
+========================================================
+LOGISTIC REGRESSION
+========================================================
+
+Definition
+----------
+Logistic Regression is a supervised Machine Learning algorithm mainly used
+for classification problems.
+
+Despite the name "Regression", Logistic Regression is primarily a
+classification algorithm.
+
+It predicts the probability that an observation belongs to a class.
+
+--------------------------------------------------------
+Why not use Linear Regression for Classification?
+--------------------------------------------------------
+
+Linear Regression can produce values like:
+
+-2
+0.5
+1.8
+3.2
+
+But classification usually requires probabilities between:
+
+0 and 1
+
+Therefore, Logistic Regression uses the:
+
+SIGMOID FUNCTION
+
+--------------------------------------------------------
+SIGMOID FUNCTION
+--------------------------------------------------------
+
+Formula:
+
+σ(z) = 1 / (1 + e^(-z))
+
+Output range:
+
+0 < σ(z) < 1
+
+Therefore, the output can be interpreted as a probability.
+
+Example:
+
+Probability = 0.90
+→ 90% probability of class 1
+
+Probability = 0.20
+→ 20% probability of class 1
+
+--------------------------------------------------------
+LOGISTIC REGRESSION WORKFLOW
+--------------------------------------------------------
+
+Input Features
+      ↓
+Linear Combination
+      ↓
+z = β₀ + β₁X₁ + β₂X₂ + ...
+      ↓
+Sigmoid Function
+      ↓
+Probability
+      ↓
+Decision Threshold
+      ↓
+Predicted Class
+
+--------------------------------------------------------
+DEFAULT THRESHOLD
+--------------------------------------------------------
+
+Usually:
+
+Probability >= 0.5
+→ Class 1
+
+Probability < 0.5
+→ Class 0
+
+Example:
+
+Probability = 0.80
+→ Class 1
+
+Probability = 0.30
+→ Class 0
+
+The threshold can be changed depending on the problem.
+
+========================================================
+BINARY CLASSIFICATION
+========================================================
+
+Definition
+----------
+Binary Classification has only two possible classes.
+
+Example:
+
+Predict whether a customer will purchase a product.
+
+0 → No
+1 → Yes
+
+Features:
+
+Age
+Salary
+Previous Purchases
+
+Target:
+
+Purchased
+
+--------------------------------------------------------
+PRACTICAL IMPLEMENTATION
+--------------------------------------------------------
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+Predict Probability
+--------------------------------------------------------
+
+y_probability = model.predict_proba(X_test)
+
+This returns probabilities for each class.
+
+Example:
+
+[[0.20, 0.80]]
+
+Meaning:
+
+Class 0 → 20%
+Class 1 → 80%
+
+--------------------------------------------------------
+IMPORTANT
+--------------------------------------------------------
+
+Logistic Regression uses a classification objective, commonly
+log loss / binary cross-entropy for binary classification.
+
+========================================================
+LOGISTIC REGRESSION WITH MULTIPLE INPUTS
+========================================================
+
+Multiple input means the model uses multiple independent variables.
+
+Example:
+
+Predict whether a person will buy a product using:
+
+Age
+Salary
+Experience
+Previous Purchases
+
+Mathematical form:
+
+z = β₀ + β₁X₁ + β₂X₂ + β₃X₃ + ...
+
+Then:
+
+Probability = sigmoid(z)
+
+--------------------------------------------------------
+Example
+--------------------------------------------------------
+
+X₁ = Age
+X₂ = Salary
+X₃ = Experience
+
+Model:
+
+z = β₀ + β₁(Age) + β₂(Salary) + β₃(Experience)
+
+      ↓
+
+Sigmoid
+
+      ↓
+
+Probability
+
+      ↓
+
+Class 0 or Class 1
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+========================================================
+LOGISTIC REGRESSION WITH POLYNOMIAL INPUT
+========================================================
+
+Sometimes the relationship between features and the target is not adequately
+represented by a simple linear combination of the original features.
+
+We can create polynomial features.
+
+Example:
+
+Original:
+
+X
+
+Polynomial Features:
+
+X
+X²
+X³
+
+For two features X₁ and X₂:
+
+X₁
+X₂
+X₁²
+X₂²
+X₁X₂
+
+These transformed features can then be used by Logistic Regression.
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LogisticRegression
+
+poly = PolynomialFeatures(degree=2)
+
+X_poly = poly.fit_transform(X)
+
+model = LogisticRegression()
+
+model.fit(X_poly, y)
+
+--------------------------------------------------------
+Important
+--------------------------------------------------------
+
+Polynomial Logistic Regression does NOT mean Logistic Regression itself
+becomes a polynomial algorithm.
+
+Instead:
+
+Original Features
+      ↓
+PolynomialFeatures
+      ↓
+New Features
+      ↓
+Logistic Regression
+
+This allows a nonlinear decision boundary in the original feature space.
+
+========================================================
+MULTICLASS CLASSIFICATION
+========================================================
+
+Definition
+----------
+Multiclass Classification means there are more than two possible classes.
+
+Example:
+
+Predict type of flower:
+
+0 → Setosa
+1 → Versicolor
+2 → Virginica
+
+--------------------------------------------------------
+Example
+--------------------------------------------------------
+
+Input:
+
+Sepal Length
+Sepal Width
+Petal Length
+Petal Width
+
+Output:
+
+Setosa
+Versicolor
+Virginica
+
+--------------------------------------------------------
+Logistic Regression for Multiclass
+--------------------------------------------------------
+
+Scikit-learn's LogisticRegression supports multiclass classification.
+
+Example:
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+The model predicts one class among multiple possible classes.
+
+--------------------------------------------------------
+Common Strategies
+--------------------------------------------------------
+
+1. One-vs-Rest (OvR)
+2. Multinomial / Softmax approach
+
+The exact strategy depends on the solver and configuration.
+
+========================================================
+CONFUSION MATRIX
+========================================================
+
+Definition
+----------
+A Confusion Matrix is a table used to evaluate the performance of a
+classification model.
+
+For Binary Classification:
+
+                    Predicted
+                 Positive  Negative
+
+Actual Positive     TP        FN
+
+Actual Negative     FP        TN
+
+--------------------------------------------------------
+FOUR IMPORTANT TERMS
+--------------------------------------------------------
+
+1. TRUE POSITIVE (TP)
+---------------------
+Actual = Positive
+Predicted = Positive
+
+Example:
+
+Patient has disease.
+Model predicts disease.
+
+Correct prediction.
+
+--------------------------------------------------------
+
+2. TRUE NEGATIVE (TN)
+---------------------
+Actual = Negative
+Predicted = Negative
+
+Example:
+
+Patient does not have disease.
+Model predicts no disease.
+
+Correct prediction.
+
+--------------------------------------------------------
+
+3. FALSE POSITIVE (FP)
+----------------------
+Actual = Negative
+Predicted = Positive
+
+Also called:
+
+Type I Error
+
+Example:
+
+Healthy patient is predicted as diseased.
+
+--------------------------------------------------------
+
+4. FALSE NEGATIVE (FN)
+----------------------
+Actual = Positive
+Predicted = Negative
+
+Also called:
+
+Type II Error
+
+Example:
+
+Patient has disease but model predicts no disease.
+
+========================================================
+CONFUSION MATRIX EXAMPLE
+========================================================
+
+Suppose:
+
+TP = 80
+TN = 90
+FP = 10
+FN = 20
+
+Confusion Matrix:
+
+                 Predicted
+                 Positive Negative
+
+Actual Positive      80      20
+Actual Negative      10      90
+
+========================================================
+ACCURACY
+========================================================
+
+Definition
+----------
+Accuracy tells us the percentage of total predictions that were correct.
+
+Formula:
+
+Accuracy = (TP + TN) / (TP + TN + FP + FN)
+
+Example:
+
+TP = 80
+TN = 90
+FP = 10
+FN = 20
+
+Accuracy:
+
+(80 + 90) / (80 + 90 + 10 + 20)
+
+= 170 / 200
+
+= 0.85
+
+Accuracy = 85%
+
+--------------------------------------------------------
+Important
+--------------------------------------------------------
+
+Accuracy can be misleading when the dataset is highly imbalanced.
+
+========================================================
+PRECISION
+========================================================
+
+Definition
+----------
+Precision tells us:
+
+"Of all observations predicted as positive, how many were actually positive?"
+
+Formula:
+
+Precision = TP / (TP + FP)
+
+High Precision:
+→ Few False Positives.
+
+--------------------------------------------------------
+Example
+--------------------------------------------------------
+
+TP = 80
+FP = 10
+
+Precision:
+
+80 / (80 + 10)
+
+= 0.889
+
+Precision ≈ 88.9%
+
+--------------------------------------------------------
+When is Precision Important?
+--------------------------------------------------------
+
+When False Positives are costly.
+
+Example:
+
+Spam detection
+
+You don't want important emails to be incorrectly classified as spam.
+
+========================================================
+RECALL / SENSITIVITY
+========================================================
+
+Definition
+----------
+Recall tells us:
+
+"Of all actual positive cases, how many did the model correctly identify?"
+
+Formula:
+
+Recall = TP / (TP + FN)
+
+Recall is also called:
+
+Sensitivity
+True Positive Rate (TPR)
+
+--------------------------------------------------------
+Example
+--------------------------------------------------------
+
+TP = 80
+FN = 20
+
+Recall:
+
+80 / (80 + 20)
+
+= 0.80
+
+Recall = 80%
+
+--------------------------------------------------------
+When is Recall Important?
+--------------------------------------------------------
+
+When False Negatives are costly.
+
+Example:
+
+Disease detection
+
+Missing a patient who actually has a disease can be dangerous.
+
+========================================================
+F1-SCORE
+========================================================
+
+Definition
+----------
+F1-Score is the harmonic mean of Precision and Recall.
+
+Formula:
+
+F1 = 2 × (Precision × Recall)
+        -----------------------
+        (Precision + Recall)
+
+--------------------------------------------------------
+Why Use F1-Score?
+--------------------------------------------------------
+
+F1-Score is useful when:
+
+• Dataset is imbalanced.
+• Both Precision and Recall are important.
+• You need a balance between Precision and Recall.
+
+========================================================
+PRECISION vs RECALL
+========================================================
+
+Precision:
+
+Focuses on:
+"Predicted Positive → How many are actually positive?"
+
+Important when:
+False Positives are costly.
+
+--------------------------------------------------------
+
+Recall:
+
+Focuses on:
+"Actual Positive → How many did we correctly find?"
+
+Important when:
+False Negatives are costly.
+
+--------------------------------------------------------
+Easy Memory Trick
+--------------------------------------------------------
+
+PRECISION:
+
+"Prediction me kitna correct?"
+
+RECALL:
+
+"Actual positive me kitna pakda?"
+
+========================================================
+IMBALANCED DATASET
+========================================================
+
+Definition
+----------
+An Imbalanced Dataset is a dataset where one class has significantly more
+observations than another class.
+
+Example:
+
+Class 0 → 9500
+Class 1 → 500
+
+Total = 10,000
+
+Class 0 = 95%
+Class 1 = 5%
+
+This is an imbalanced dataset.
+
+--------------------------------------------------------
+Why Is It a Problem?
+--------------------------------------------------------
+
+Suppose a fraud detection dataset contains:
+
+Normal transactions = 9900
+Fraud transactions  = 100
+
+A model predicts:
+
+EVERY transaction = Normal
+
+Accuracy:
+
+9900 / 10000 = 99%
+
+Accuracy = 99%
+
+Sounds excellent!
+
+But:
+
+Fraud detected = 0
+
+The model is actually useless for detecting fraud.
+
+--------------------------------------------------------
+Problems
+--------------------------------------------------------
+
+• Accuracy becomes misleading.
+• Minority class may be ignored.
+• Model may be biased toward majority class.
+
+========================================================
+HOW TO HANDLE IMBALANCED DATA?
+========================================================
+
+1. Oversampling
+---------------
+Increase minority-class samples.
+
+Example:
+
+Minority = 500
+After oversampling = 5000
+
+One popular technique:
+
+SMOTE
+
+SMOTE creates synthetic minority samples.
+
+--------------------------------------------------------
+
+2. Undersampling
+----------------
+Reduce majority-class samples.
+
+Example:
+
+Majority = 10,000
+Minority = 1,000
+
+Reduce majority samples to:
+
+3,000
+
+--------------------------------------------------------
+
+3. Class Weights
+----------------
+Give more importance to the minority class during training.
+
+Example:
+
+LogisticRegression(class_weight="balanced")
+
+This can be useful when we don't want to manually resample the dataset.
+
+--------------------------------------------------------
+
+4. Use Appropriate Metrics
+--------------------------
+
+Instead of relying only on Accuracy, use:
+
+✓ Precision
+✓ Recall
+✓ F1-Score
+✓ ROC-AUC
+✓ PR-AUC
+
+For highly imbalanced problems, Precision-Recall analysis can be especially
+informative.
+
+========================================================
+NAIVE BAYES
+========================================================
+
+Definition
+----------
+Naive Bayes is a supervised Machine Learning classification algorithm based
+on Bayes' Theorem.
+
+It is called "Naive" because it makes a strong assumption that features are
+conditionally independent given the class.
+
+--------------------------------------------------------
+BAYES' THEOREM
+--------------------------------------------------------
+
+Formula:
+
+P(A|B) = P(B|A) × P(A)
+         ----------------
+              P(B)
+
+Where:
+
+P(A|B) = Posterior Probability
+P(B|A) = Likelihood
+P(A)   = Prior Probability
+P(B)   = Evidence
+
+--------------------------------------------------------
+For Classification
+--------------------------------------------------------
+
+Naive Bayes estimates:
+
+P(Class | Features)
+
+and predicts the class with the highest posterior probability.
+
+========================================================
+WHY "NAIVE"?
+========================================================
+
+Suppose we want to classify an email.
+
+Features:
+
+Contains "free"
+Contains "offer"
+Contains "win"
+
+Naive Bayes assumes these features are conditionally independent given the
+class.
+
+This assumption is often unrealistic in real-world data, but the algorithm
+can still work surprisingly well in many applications.
+
+========================================================
+TYPES OF NAIVE BAYES
+========================================================
+
+1. Gaussian Naive Bayes
+-----------------------
+Used mainly for continuous numerical features that are modeled with a
+Gaussian distribution.
+
+Python:
+
+from sklearn.naive_bayes import GaussianNB
+
+--------------------------------------------------------
+
+2. Multinomial Naive Bayes
+--------------------------
+Commonly used for count-based features such as text word counts.
+
+Example:
+
+Text Classification
+Spam Detection
+
+Python:
+
+from sklearn.naive_bayes import MultinomialNB
+
+--------------------------------------------------------
+
+3. Bernoulli Naive Bayes
+------------------------
+Used for binary/Boolean features.
+
+Example:
+
+Word present = 1
+Word absent = 0
+
+Python:
+
+from sklearn.naive_bayes import BernoulliNB
+
+========================================================
+NAIVE BAYES PRACTICAL
+========================================================
+
+Example:
+
+from sklearn.naive_bayes import GaussianNB
+
+model = GaussianNB()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+Evaluation
+--------------------------------------------------------
+
+from sklearn.metrics import accuracy_score
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print(accuracy)
+
+For imbalanced classification, also check:
+
+Precision
+Recall
+F1-Score
+Confusion Matrix
+
+========================================================
+ADVANTAGES OF NAIVE BAYES
+========================================================
+
+✓ Simple and fast.
+✓ Works well with high-dimensional data.
+✓ Requires relatively little training data.
+✓ Often performs well for text classification.
+✓ Can handle multiclass classification.
+
+========================================================
+DISADVANTAGES OF NAIVE BAYES
+========================================================
+
+✗ Strong independence assumption may be unrealistic.
+✗ Correlated features can reduce performance.
+✗ Probability estimates may not always be well calibrated.
+
+========================================================
+LOGISTIC REGRESSION vs NAIVE BAYES
+========================================================
+
+Logistic Regression
+-------------------
+• Discriminative model.
+• Directly models class probabilities / decision boundary.
+• Often useful when relationships are approximately linear in feature space.
+• Can use regularization.
+
+Naive Bayes
+-----------
+• Generative probabilistic model.
+• Uses Bayes' theorem.
+• Assumes conditional independence of features.
+• Often very fast.
+
+========================================================
+CLASSIFICATION WORKFLOW
+========================================================
+
+Collect Dataset
+       ↓
+Data Cleaning
+       ↓
+Handle Missing Values
+       ↓
+Encoding
+       ↓
+Feature Selection
+       ↓
+Train-Test Split
+       ↓
+Feature Scaling (when required)
+       ↓
+Handle Class Imbalance
+       ↓
+Train Classification Model
+       ↓
+Prediction
+       ↓
+Confusion Matrix
+       ↓
+Precision / Recall / F1
+       ↓
+Model Improvement
+
+========================================================
+INTERVIEW QUESTIONS
+========================================================
+
+Q1. What is Classification?
+
+Ans:
+Classification is a supervised Machine Learning technique used to predict
+categorical classes.
+
+--------------------------------------------------------
+
+Q2. What is Binary Classification?
+
+Ans:
+Classification involving two classes, such as Spam/Not Spam or
+Disease/No Disease.
+
+--------------------------------------------------------
+
+Q3. What is Multiclass Classification?
+
+Ans:
+Classification involving more than two possible classes.
+
+--------------------------------------------------------
+
+Q4. Why is Logistic Regression used for Classification?
+
+Ans:
+It converts a linear combination of input features into a probability using
+the sigmoid function and then assigns a class based on a decision threshold.
+
+--------------------------------------------------------
+
+Q5. What is a Confusion Matrix?
+
+Ans:
+A Confusion Matrix is a table that summarizes classification predictions
+using TP, TN, FP, and FN.
+
+--------------------------------------------------------
+
+Q6. What is Precision?
+
+Ans:
+Precision is the proportion of predicted positive cases that are actually
+positive.
+
+Precision = TP / (TP + FP)
+
+--------------------------------------------------------
+
+Q7. What is Recall?
+
+Ans:
+Recall is the proportion of actual positive cases that the model correctly
+identifies.
+
+Recall = TP / (TP + FN)
+
+--------------------------------------------------------
+
+Q8. What is F1-Score?
+
+Ans:
+F1-Score is the harmonic mean of Precision and Recall.
+
+--------------------------------------------------------
+
+Q9. What is an Imbalanced Dataset?
+
+Ans:
+A dataset in which the class distribution is significantly unequal.
+
+--------------------------------------------------------
+
+Q10. How can you handle an Imbalanced Dataset?
+
+Ans:
+• Oversampling
+• Undersampling
+• SMOTE
+• Class weights
+• Appropriate evaluation metrics
+
+--------------------------------------------------------
+
+Q11. What is Naive Bayes?
+
+Ans:
+Naive Bayes is a probabilistic classification algorithm based on Bayes'
+Theorem and assumes conditional independence between features given the class.
+
+--------------------------------------------------------
+
+Q12. Why is Naive Bayes called "Naive"?
+
+Ans:
+Because it assumes that features are conditionally independent given the
+class, which is a simplifying assumption.
+
+========================================================
+QUICK REVISION
+========================================================
+
+✓ Classification → Predicts categories/classes.
+✓ Binary → 2 classes.
+✓ Multiclass → More than 2 classes.
+✓ Logistic Regression → Probability-based classification algorithm.
+✓ Sigmoid → Converts score into probability between 0 and 1.
+✓ Threshold → Converts probability into class.
+✓ Confusion Matrix → TP, TN, FP, FN.
+✓ Precision → Focuses on False Positives.
+✓ Recall/Sensitivity → Focuses on False Negatives.
+✓ F1 → Balance between Precision and Recall.
+✓ Imbalanced Dataset → Unequal class distribution.
+✓ SMOTE → Synthetic minority oversampling technique.
+✓ Naive Bayes → Bayes' theorem + conditional independence assumption.
+✓ GaussianNB → Continuous numerical features.
+✓ MultinomialNB → Count-based features, commonly text.
+✓ BernoulliNB → Binary features.
