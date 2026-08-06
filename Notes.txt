@@ -5348,3 +5348,511 @@ QUICK REVISION
 ✓ GaussianNB → Continuous numerical features.
 ✓ MultinomialNB → Count-based features, commonly text.
 ✓ BernoulliNB → Binary features.
+
+
+
+========================================================
+DECISION TREE (CLASSIFICATION)
+========================================================
+
+Definition
+----------
+Decision Tree is a Supervised Machine Learning algorithm used for both
+Classification and Regression.
+
+For Classification, it predicts the class label by asking a series of
+questions (decision rules) about the input features.
+
+In simple words:
+
+"A Decision Tree makes decisions by splitting the data into smaller groups
+based on feature values until it reaches a final prediction."
+
+--------------------------------------------------------
+Real-Life Example
+--------------------------------------------------------
+
+Suppose a bank wants to approve a loan.
+
+Questions:
+
+Income > ₹50,000?
+        │
+   Yes  │  No
+        │
+Credit Score > 700?
+        │
+   Yes  │  No
+        │
+Loan    Reject
+
+The tree asks questions step by step and finally predicts the result.
+
+========================================================
+STRUCTURE OF A DECISION TREE
+========================================================
+
+1. Root Node
+------------
+The top-most node where the first split is made.
+
+2. Decision Node
+----------------
+A node where the data is split based on a condition.
+
+3. Leaf Node
+------------
+The final node that gives the prediction (class label).
+
+4. Branch
+---------
+A connection between nodes representing the outcome of a condition.
+
+--------------------------------------------------------
+Example Tree
+--------------------------------------------------------
+
+                 Income > 50,000?
+                      /      \
+                   Yes        No
+                  /            \
+      Credit Score > 700?      Reject
+            /      \
+         Yes        No
+        /            \
+    Approve       Reject
+
+========================================================
+HOW DOES A DECISION TREE WORK?
+========================================================
+
+Step 1:
+Start with the complete dataset.
+
+        ↓
+
+Step 2:
+Choose the best feature for splitting.
+
+        ↓
+
+Step 3:
+Split the dataset into smaller groups.
+
+        ↓
+
+Step 4:
+Repeat the process for each subgroup.
+
+        ↓
+
+Step 5:
+Stop when a stopping condition is met.
+
+        ↓
+
+Leaf Node (Prediction)
+
+========================================================
+HOW DOES THE TREE CHOOSE THE BEST SPLIT?
+========================================================
+
+The algorithm selects the feature that creates the purest child nodes.
+
+Common criteria:
+
+✓ Gini Impurity
+✓ Entropy
+✓ Information Gain
+
+--------------------------------------------------------
+1. GINI IMPURITY
+--------------------------------------------------------
+
+Definition
+----------
+Gini Impurity measures how mixed the classes are in a node.
+
+Formula:
+
+Gini = 1 - Σ(Pᵢ²)
+
+Where:
+
+Pᵢ = Probability of each class
+
+Range:
+
+0 to 0.5 (for binary classification)
+
+Interpretation:
+
+Gini = 0
+→ Pure node (all samples belong to one class)
+
+Higher Gini
+→ More mixed classes
+
+Example:
+
+Node:
+
+10 Positive
+0 Negative
+
+Gini = 0 (Pure)
+
+Node:
+
+5 Positive
+5 Negative
+
+Gini = 0.5 (Maximum impurity for binary classes)
+
+--------------------------------------------------------
+2. ENTROPY
+--------------------------------------------------------
+
+Definition
+----------
+Entropy measures the amount of uncertainty or randomness in a node.
+
+Formula:
+
+Entropy = -Σ(Pᵢ log₂ Pᵢ)
+
+Range:
+
+0 to 1 (for binary classification)
+
+Interpretation:
+
+Entropy = 0
+→ Pure node
+
+Entropy = 1
+→ Maximum uncertainty (binary classes equally mixed)
+
+--------------------------------------------------------
+3. INFORMATION GAIN
+--------------------------------------------------------
+
+Definition
+----------
+Information Gain measures how much uncertainty is reduced after splitting
+the dataset.
+
+Formula:
+
+Information Gain = Parent Entropy - Weighted Child Entropy
+
+Higher Information Gain
+→ Better split
+
+Goal:
+Choose the split with the highest Information Gain.
+
+========================================================
+STOPPING CONDITIONS
+========================================================
+
+The tree stops growing when:
+
+✓ All samples belong to one class.
+✓ Maximum tree depth is reached.
+✓ Minimum number of samples in a node is reached.
+✓ No further improvement is possible.
+
+========================================================
+OVERFITTING IN DECISION TREES
+========================================================
+
+A very deep tree may memorize the training data.
+
+Training Accuracy:
+Very High
+
+Testing Accuracy:
+Low
+
+This is called:
+
+OVERFITTING
+
+--------------------------------------------------------
+HOW TO PREVENT OVERFITTING?
+--------------------------------------------------------
+
+1. Limit max_depth
+
+2. Increase min_samples_split
+
+3. Increase min_samples_leaf
+
+4. Prune the tree
+
+5. Use cross-validation to tune hyperparameters
+
+========================================================
+IMPORTANT PARAMETERS
+========================================================
+
+criterion
+
+Options:
+
+"gini"
+"entropy"
+
+----------------------------------------
+
+max_depth
+
+Maximum depth of the tree.
+
+----------------------------------------
+
+min_samples_split
+
+Minimum samples required to split a node.
+
+----------------------------------------
+
+min_samples_leaf
+
+Minimum samples required in a leaf node.
+
+----------------------------------------
+
+random_state
+
+Ensures reproducible results.
+
+========================================================
+PYTHON IMPLEMENTATION
+========================================================
+
+Import Libraries
+
+from sklearn.tree import DecisionTreeClassifier
+
+----------------------------------------
+
+Create Model
+
+model = DecisionTreeClassifier(
+    criterion="gini",
+    random_state=42
+)
+
+----------------------------------------
+
+Train Model
+
+model.fit(X_train, y_train)
+
+----------------------------------------
+
+Prediction
+
+y_pred = model.predict(X_test)
+
+----------------------------------------
+
+Using Entropy
+
+model = DecisionTreeClassifier(
+    criterion="entropy",
+    random_state=42
+)
+
+========================================================
+VISUALIZING THE TREE
+========================================================
+
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12,8))
+
+plot_tree(
+    model,
+    filled=True,
+    feature_names=X.columns,
+    class_names=["0","1"]
+)
+
+plt.show()
+
+========================================================
+MODEL EVALUATION
+========================================================
+
+Evaluate using:
+
+✓ Accuracy
+
+✓ Confusion Matrix
+
+✓ Precision
+
+✓ Recall
+
+✓ F1-Score
+
+Example:
+
+from sklearn.metrics import accuracy_score
+
+accuracy = accuracy_score(y_test, y_pred)
+
+========================================================
+ADVANTAGES
+========================================================
+
+✓ Easy to understand and visualize.
+✓ No feature scaling required.
+✓ Handles numerical and categorical features (after suitable preprocessing in scikit-learn).
+✓ Can model non-linear relationships.
+✓ Fast prediction.
+✓ Provides feature importance.
+
+========================================================
+DISADVANTAGES
+========================================================
+
+✗ Can overfit easily.
+✗ Sensitive to small changes in data.
+✗ May become very deep and complex.
+✗ A single tree may be less accurate than ensemble methods like Random Forest.
+
+========================================================
+REAL-LIFE APPLICATIONS
+========================================================
+
+• Loan Approval
+• Disease Diagnosis
+• Spam Detection
+• Customer Churn Prediction
+• Employee Attrition
+• Fraud Detection
+
+========================================================
+DECISION TREE vs LOGISTIC REGRESSION
+========================================================
+
+Decision Tree
+
+• Tree-based algorithm.
+• Learns decision rules.
+• Handles non-linear relationships.
+• Feature scaling is not required.
+• Easy to visualize.
+
+----------------------------------------
+
+Logistic Regression
+
+• Linear classification algorithm.
+• Predicts probabilities using the sigmoid function.
+• Works best when the decision boundary is approximately linear.
+• Feature scaling is often recommended.
+
+========================================================
+INTERVIEW QUESTIONS
+========================================================
+
+Q1. What is a Decision Tree?
+
+Ans:
+A Decision Tree is a supervised learning algorithm that predicts a class by
+splitting the data into smaller groups based on decision rules.
+
+--------------------------------------------------------
+
+Q2. What are the main parts of a Decision Tree?
+
+Ans:
+• Root Node
+• Decision Node
+• Leaf Node
+• Branch
+
+--------------------------------------------------------
+
+Q3. Which criteria are commonly used for splitting?
+
+Ans:
+• Gini Impurity
+• Entropy
+• Information Gain
+
+--------------------------------------------------------
+
+Q4. What is Gini Impurity?
+
+Ans:
+Gini Impurity measures how mixed the classes are in a node. A lower Gini value
+indicates a purer node.
+
+--------------------------------------------------------
+
+Q5. What is Entropy?
+
+Ans:
+Entropy measures the uncertainty or randomness in a node. Lower entropy means
+less uncertainty.
+
+--------------------------------------------------------
+
+Q6. What is Information Gain?
+
+Ans:
+Information Gain measures the reduction in entropy after a split. The algorithm
+chooses the split with the highest Information Gain.
+
+--------------------------------------------------------
+
+Q7. Does a Decision Tree require Feature Scaling?
+
+Ans:
+No. Decision Trees are not affected by feature scaling because they split data
+based on feature values rather than distances.
+
+--------------------------------------------------------
+
+Q8. Why do Decision Trees overfit?
+
+Ans:
+They can continue splitting until they memorize the training data, resulting
+in poor performance on unseen data.
+
+--------------------------------------------------------
+
+Q9. How can overfitting be reduced?
+
+Ans:
+By limiting tree depth, increasing minimum samples for splits/leaves, pruning,
+or tuning hyperparameters.
+
+========================================================
+QUICK REVISION
+========================================================
+
+✓ Decision Tree = Supervised learning algorithm.
+✓ Used for Classification and Regression.
+✓ Root Node → First split.
+✓ Decision Node → Intermediate split.
+✓ Leaf Node → Final prediction.
+✓ Branch → Connection between nodes.
+✓ Split criteria:
+   • Gini Impurity
+   • Entropy
+   • Information Gain
+✓ Lower Gini and Entropy = Better (purer) node.
+✓ Higher Information Gain = Better split.
+✓ No Feature Scaling required.
+✓ Can overfit if the tree grows too deep.
+✓ Control overfitting using max_depth, min_samples_split, min_samples_leaf, and pruning.
+✓ Common evaluation metrics:
+   Accuracy, Precision, Recall, F1-Score, Confusion Matrix.
