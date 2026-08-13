@@ -5856,3 +5856,1336 @@ QUICK REVISION
 ✓ Control overfitting using max_depth, min_samples_split, min_samples_leaf, and pruning.
 ✓ Common evaluation metrics:
    Accuracy, Precision, Recall, F1-Score, Confusion Matrix.
+
+
+
+
+   ========================================================
+1. PRE-PRUNING AND POST-PRUNING IN DECISION TREE
+========================================================
+
+Pruning
+-------
+Pruning is the process of controlling/removing unnecessary branches of a
+Decision Tree to reduce overfitting and improve generalization.
+
+Problem:
+
+Very Deep Tree
+     ↓
+Learns training data too closely
+     ↓
+Low Training Error
+     ↓
+High Test Error
+     ↓
+OVERFITTING
+
+Pruning helps control this.
+
+--------------------------------------------------------
+PRE-PRUNING
+--------------------------------------------------------
+
+Definition
+----------
+Pre-Pruning means stopping the growth of the Decision Tree before it becomes
+too complex.
+
+We set restrictions while the tree is being built.
+
+Common parameters:
+
+1. max_depth
+2. min_samples_split
+3. min_samples_leaf
+4. max_leaf_nodes
+5. min_impurity_decrease
+
+Example:
+
+DecisionTreeClassifier(max_depth=5)
+
+The tree cannot grow beyond depth 5.
+
+--------------------------------------------------------
+POST-PRUNING
+--------------------------------------------------------
+
+Definition
+----------
+Post-Pruning means first growing a larger tree and then removing unnecessary
+branches.
+
+In scikit-learn, Cost Complexity Pruning can be performed using:
+
+ccp_alpha
+
+Example:
+
+model = DecisionTreeClassifier(
+    ccp_alpha=0.01,
+    random_state=42
+)
+
+Higher ccp_alpha
+→ Stronger pruning
+→ Smaller tree
+
+--------------------------------------------------------
+PRE vs POST PRUNING
+--------------------------------------------------------
+
+Pre-Pruning:
+→ Stop tree growth early.
+
+Post-Pruning:
+→ Grow tree and then remove unnecessary branches.
+
+Goal of both:
+→ Reduce overfitting.
+→ Improve generalization.
+→ Create a simpler model.
+
+========================================================
+2. DECISION TREE — REGRESSION
+========================================================
+
+Definition
+----------
+Decision Tree Regression is used to predict continuous numerical values.
+
+Example:
+
+House Size → House Price
+
+Input:
+2000 sq ft
+
+Output:
+₹80 lakh
+
+--------------------------------------------------------
+Classification vs Regression
+--------------------------------------------------------
+
+Classification:
+
+Leaf predicts a class.
+
+Example:
+
+Yes / No
+
+Regression:
+
+Leaf predicts a numerical value.
+
+Example:
+
+₹80,00,000
+
+--------------------------------------------------------
+How Does Regression Tree Split?
+--------------------------------------------------------
+
+Instead of Gini or Entropy, Regression Trees commonly use a criterion based
+on minimizing prediction error, such as:
+
+Mean Squared Error (MSE)
+
+The tree chooses splits that reduce the error within the resulting nodes.
+
+--------------------------------------------------------
+Prediction
+--------------------------------------------------------
+
+A regression tree commonly predicts the average target value of the training
+samples that fall into a leaf.
+
+Example:
+
+Leaf contains:
+
+₹40 lakh
+₹50 lakh
+₹60 lakh
+
+Prediction:
+
+(40 + 50 + 60) / 3
+= ₹50 lakh
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.tree import DecisionTreeRegressor
+
+model = DecisionTreeRegressor(
+    max_depth=5,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+Evaluation
+--------------------------------------------------------
+
+Common metrics:
+
+✓ MAE
+✓ MSE
+✓ RMSE
+✓ R² Score
+
+========================================================
+3. K-NEAREST NEIGHBOURS (KNN) — CLASSIFICATION
+========================================================
+
+Definition
+----------
+K-Nearest Neighbours (KNN) is a supervised Machine Learning algorithm that
+predicts the class of a new data point based on the classes of its nearest
+training examples.
+
+KNN is called a:
+
+"Lazy Learning Algorithm"
+
+because it does not learn an explicit model during training in the same way
+as many parametric algorithms do. It mainly stores the training data and
+performs computation during prediction.
+
+--------------------------------------------------------
+How KNN Works
+--------------------------------------------------------
+
+Suppose:
+
+K = 3
+
+For a new data point:
+
+        ● New Point
+
+Find its 3 nearest neighbours.
+
+Neighbour 1 → Class A
+Neighbour 2 → Class A
+Neighbour 3 → Class B
+
+Majority:
+
+Class A
+
+Prediction:
+
+Class A
+
+--------------------------------------------------------
+Steps
+--------------------------------------------------------
+
+1. Choose K.
+2. Calculate distance from the new point to training points.
+3. Find K nearest points.
+4. Look at their labels.
+5. Take majority vote.
+6. Predict the class.
+
+--------------------------------------------------------
+DISTANCE
+--------------------------------------------------------
+
+Common distance:
+
+Euclidean Distance
+
+Formula:
+
+d = √[(x₂-x₁)² + (y₂-y₁)²]
+
+For multiple dimensions:
+
+d = √Σ(xᵢ-yᵢ)²
+
+--------------------------------------------------------
+Choosing K
+--------------------------------------------------------
+
+Small K:
+
+→ More sensitive to noise.
+→ Can overfit.
+
+Large K:
+
+→ Smoother decision boundary.
+→ Can underfit.
+
+Therefore, K should be selected using validation/cross-validation rather than
+arbitrarily.
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.neighbors import KNeighborsClassifier
+
+model = KNeighborsClassifier(n_neighbors=5)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+IMPORTANT
+--------------------------------------------------------
+
+Feature Scaling is very important for KNN because KNN is distance-based.
+
+Example:
+
+Age → 20-60
+Salary → 20,000-2,00,000
+
+Without scaling, Salary can dominate the distance calculation.
+
+Common scaling techniques:
+
+✓ StandardScaler
+✓ MinMaxScaler
+
+========================================================
+4. KNN — REGRESSION
+========================================================
+
+Definition
+----------
+KNN Regression predicts a numerical value using the target values of the
+nearest K neighbours.
+
+Instead of majority voting, it generally takes the average of the neighbours'
+target values.
+
+--------------------------------------------------------
+Example
+--------------------------------------------------------
+
+K = 3
+
+Nearest neighbours:
+
+₹40,000
+₹50,000
+₹60,000
+
+Prediction:
+
+(40,000 + 50,000 + 60,000) / 3
+
+= ₹50,000
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.neighbors import KNeighborsRegressor
+
+model = KNeighborsRegressor(n_neighbors=5)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+Evaluation
+--------------------------------------------------------
+
+✓ MAE
+✓ MSE
+✓ RMSE
+✓ R²
+
+========================================================
+5. SUPPORT VECTOR MACHINE (SVM) — CLASSIFICATION
+========================================================
+
+Definition
+----------
+Support Vector Machine (SVM) is a supervised Machine Learning algorithm used
+for classification and regression.
+
+For classification, SVM tries to find a decision boundary that separates
+classes while maximizing the margin between them.
+
+--------------------------------------------------------
+KEY CONCEPTS
+--------------------------------------------------------
+
+1. Hyperplane
+2. Margin
+3. Support Vectors
+
+--------------------------------------------------------
+HYPERPLANE
+--------------------------------------------------------
+
+A hyperplane is the decision boundary separating classes.
+
+For two dimensions:
+
+Class A        |        Class B
+● ● ●          |        ○ ○ ○
+● ● ●          |        ○ ○ ○
+
+               ↑
+          Hyperplane
+
+--------------------------------------------------------
+MARGIN
+--------------------------------------------------------
+
+Margin is the distance between the decision boundary and the closest data
+points from each class.
+
+SVM tries to maximize this margin.
+
+Large Margin
+→ Better separation
+→ Often better generalization
+
+--------------------------------------------------------
+SUPPORT VECTORS
+--------------------------------------------------------
+
+Support Vectors are the training points closest to the decision boundary.
+
+They are especially important because they determine the position of the
+maximum-margin boundary.
+
+========================================================
+KERNEL TRICK
+========================================================
+
+Sometimes data cannot be separated using a straight line.
+
+SVM can use kernels to create nonlinear decision boundaries.
+
+Common kernels:
+
+✓ Linear
+✓ Polynomial
+✓ RBF
+✓ Sigmoid
+
+--------------------------------------------------------
+RBF KERNEL
+--------------------------------------------------------
+
+RBF = Radial Basis Function
+
+It is commonly used for nonlinear classification.
+
+Python:
+
+from sklearn.svm import SVC
+
+model = SVC(
+    kernel="rbf",
+    C=1.0,
+    gamma="scale"
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+IMPORTANT PARAMETERS
+--------------------------------------------------------
+
+C
+-
+Controls the trade-off between margin size and classification errors.
+
+Higher C:
+→ Penalizes training errors more strongly.
+→ Can produce a narrower margin.
+→ May increase overfitting risk.
+
+Lower C:
+→ Allows more violations/errors.
+→ Encourages a wider margin.
+→ More regularization.
+
+gamma
+-----
+Important for RBF/poly kernels.
+
+Higher gamma:
+→ Each point has a more localized influence.
+→ More complex boundary.
+
+Lower gamma:
+→ Smoother, broader influence.
+→ Simpler boundary.
+
+========================================================
+6. SVM — REGRESSION
+========================================================
+
+SVM Regression is called:
+
+SVR
+Support Vector Regression
+
+Instead of finding a classification boundary, SVR tries to fit a function
+within an epsilon-tube around the data.
+
+--------------------------------------------------------
+KEY IDEA
+--------------------------------------------------------
+
+Errors inside the epsilon margin are generally not penalized in the same way
+as errors outside it.
+
+Important parameter:
+
+epsilon
+
+It controls the width of the epsilon-insensitive tube.
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.svm import SVR
+
+model = SVR(
+    kernel="rbf",
+    C=100,
+    epsilon=0.1
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+--------------------------------------------------------
+IMPORTANT
+--------------------------------------------------------
+
+SVM/SVR is sensitive to feature scale.
+
+Therefore:
+
+Train-Test Split
+       ↓
+Feature Scaling
+       ↓
+SVM/SVR
+
+========================================================
+7. MODEL PARAMETERS vs HYPERPARAMETERS
+========================================================
+
+MODEL PARAMETERS
+----------------
+
+Parameters are learned by the model from training data.
+
+Examples:
+
+Linear Regression:
+
+Coefficients
+Intercept
+
+Logistic Regression:
+
+Coefficients
+Intercept
+
+Decision Tree:
+
+Split structure
+
+--------------------------------------------------------
+HYPERPARAMETERS
+----------------
+
+Hyperparameters are set before/during training and are not directly learned
+from the training data in the usual fitting process.
+
+Examples:
+
+Decision Tree:
+max_depth
+min_samples_split
+
+KNN:
+n_neighbors
+
+SVM:
+C
+gamma
+kernel
+
+Random Forest:
+n_estimators
+max_depth
+
+--------------------------------------------------------
+Easy Difference
+--------------------------------------------------------
+
+Parameter:
+→ Learned from data.
+
+Hyperparameter:
+→ Set by us / selected through tuning.
+
+========================================================
+8. HYPERPARAMETER TUNING
+========================================================
+
+Definition
+----------
+Hyperparameter tuning is the process of finding the best hyperparameter
+values for a Machine Learning model.
+
+Example:
+
+KNN:
+
+K = 3
+K = 5
+K = 7
+K = 9
+
+We test different values and select the one that performs best according to
+our validation strategy.
+
+--------------------------------------------------------
+Why Tune Hyperparameters?
+--------------------------------------------------------
+
+✓ Improve model performance.
+✓ Reduce overfitting.
+✓ Reduce underfitting.
+✓ Find a better model configuration.
+
+========================================================
+9. GRIDSEARCHCV
+========================================================
+
+Definition
+----------
+GridSearchCV tests all specified combinations of hyperparameters using
+cross-validation and selects the best combination according to the chosen
+scoring metric.
+
+Example:
+
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    "max_depth": [3, 5, 7],
+    "min_samples_split": [2, 5, 10]
+}
+
+grid = GridSearchCV(
+    DecisionTreeClassifier(random_state=42),
+    param_grid,
+    cv=5,
+    scoring="accuracy"
+)
+
+grid.fit(X_train, y_train)
+
+print(grid.best_params_)
+print(grid.best_score_)
+
+--------------------------------------------------------
+Advantage
+--------------------------------------------------------
+
+✓ Systematic.
+✓ Tests every combination.
+
+Disadvantage:
+
+✗ Can be computationally expensive when the search space is large.
+
+========================================================
+10. RANDOMIZEDSEARCHCV
+========================================================
+
+Definition
+----------
+RandomizedSearchCV samples a specified number of hyperparameter combinations
+from the search distributions instead of testing every possible combination.
+
+Example:
+
+from sklearn.model_selection import RandomizedSearchCV
+
+random_search = RandomizedSearchCV(
+    DecisionTreeClassifier(random_state=42),
+    param_distributions=param_grid,
+    n_iter=10,
+    cv=5,
+    scoring="accuracy",
+    random_state=42
+)
+
+random_search.fit(X_train, y_train)
+
+print(random_search.best_params_)
+
+--------------------------------------------------------
+GridSearchCV vs RandomizedSearchCV
+--------------------------------------------------------
+
+GridSearchCV:
+
+Tests every combination.
+
+RandomizedSearchCV:
+
+Tests a selected number of randomly sampled combinations.
+
+For a large hyperparameter space, RandomizedSearchCV can be much more
+efficient.
+
+========================================================
+11. CROSS-VALIDATION
+========================================================
+
+Definition
+----------
+Cross-Validation is a model evaluation technique where the training data is
+split into multiple parts (folds), and the model is trained and validated
+multiple times.
+
+Purpose:
+
+✓ Better estimate model performance.
+✓ Reduce dependence on one particular train-validation split.
+✓ Useful for model selection and hyperparameter tuning.
+
+--------------------------------------------------------
+K-FOLD CROSS-VALIDATION
+--------------------------------------------------------
+
+Suppose:
+
+K = 5
+
+Dataset:
+
+Fold 1
+Fold 2
+Fold 3
+Fold 4
+Fold 5
+
+Round 1:
+
+Train → 2,3,4,5
+Validate → 1
+
+Round 2:
+
+Train → 1,3,4,5
+Validate → 2
+
+Round 3:
+
+Train → 1,2,4,5
+Validate → 3
+
+Round 4:
+
+Train → 1,2,3,5
+Validate → 4
+
+Round 5:
+
+Train → 1,2,3,4
+Validate → 5
+
+Finally:
+
+Average Validation Score
+       ↓
+Overall CV Score
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.model_selection import cross_val_score
+
+scores = cross_val_score(
+    model,
+    X_train,
+    y_train,
+    cv=5,
+    scoring="accuracy"
+)
+
+print(scores)
+print(scores.mean())
+
+--------------------------------------------------------
+IMPORTANT
+--------------------------------------------------------
+
+Cross-validation should generally be performed on the training data when you
+still have a separate final test set.
+
+The final test set should remain untouched until final evaluation.
+
+========================================================
+12. UNSUPERVISED LEARNING
+========================================================
+
+Definition
+----------
+Unsupervised Learning is a Machine Learning approach where the dataset does
+not contain labeled target values.
+
+The algorithm tries to discover patterns, structures, or groups in the data.
+
+Supervised:
+
+Features + Target
+       ↓
+Learn relationship
+       ↓
+Prediction
+
+Unsupervised:
+
+Features only
+       ↓
+Find hidden structure
+       ↓
+Groups / Patterns
+
+--------------------------------------------------------
+Main Types
+--------------------------------------------------------
+
+1. Clustering
+2. Dimensionality Reduction
+3. Association Rule Learning
+
+Examples:
+
+K-Means
+Hierarchical Clustering
+DBSCAN
+PCA
+
+========================================================
+13. K-MEANS CLUSTERING
+========================================================
+
+Definition
+----------
+K-Means is an unsupervised clustering algorithm that divides data into K
+clusters.
+
+--------------------------------------------------------
+How It Works
+--------------------------------------------------------
+
+Step 1:
+Choose K.
+
+        ↓
+
+Step 2:
+Initialize K centroids.
+
+        ↓
+
+Step 3:
+Assign each point to its nearest centroid.
+
+        ↓
+
+Step 4:
+Calculate new centroid of each cluster.
+
+        ↓
+
+Step 5:
+Reassign points.
+
+        ↓
+
+Repeat until the assignments/centroids converge or the stopping condition
+is reached.
+
+--------------------------------------------------------
+Example
+--------------------------------------------------------
+
+Customer data:
+
+Age
+Income
+Spending Score
+
+K = 3
+
+The algorithm may create:
+
+Cluster 1 → Low spending
+Cluster 2 → Medium spending
+Cluster 3 → High spending
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.cluster import KMeans
+
+model = KMeans(
+    n_clusters=3,
+    random_state=42,
+    n_init="auto"
+)
+
+model.fit(X)
+
+labels = model.labels_
+
+========================================================
+14. HOW TO CHOOSE K?
+========================================================
+
+One common method:
+
+ELBOW METHOD
+
+Run K-Means with different K values.
+
+K = 1
+K = 2
+K = 3
+K = 4
+K = 5
+...
+
+Calculate:
+
+Inertia
+
+Inertia measures the sum of squared distances of samples to their closest
+cluster center.
+
+Plot:
+
+K → Inertia
+
+The point where the decrease starts slowing substantially is often considered
+the "elbow."
+
+This gives a candidate K, but it is not an absolute rule.
+
+--------------------------------------------------------
+Another Method
+--------------------------------------------------------
+
+Silhouette Score
+
+Higher silhouette score generally indicates better-defined clusters.
+
+========================================================
+15. HIERARCHICAL CLUSTERING
+========================================================
+
+Definition
+----------
+Hierarchical Clustering creates a hierarchy of clusters.
+
+The result can be visualized using a:
+
+DENDROGRAM
+
+--------------------------------------------------------
+TWO APPROACHES
+--------------------------------------------------------
+
+1. Agglomerative
+2. Divisive
+
+Most commonly used:
+
+Agglomerative Hierarchical Clustering
+
+--------------------------------------------------------
+AGGLOMERATIVE APPROACH
+--------------------------------------------------------
+
+Start:
+
+Every point = Separate Cluster
+
+       ↓
+
+Find closest clusters
+
+       ↓
+
+Merge them
+
+       ↓
+
+Repeat
+
+       ↓
+
+One large cluster
+
+--------------------------------------------------------
+DENDROGRAM
+--------------------------------------------------------
+
+A dendrogram shows the sequence and distance at which clusters were merged.
+
+By choosing a horizontal cut across the dendrogram, we can determine the
+number of clusters.
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.cluster import AgglomerativeClustering
+
+model = AgglomerativeClustering(
+    n_clusters=3
+)
+
+labels = model.fit_predict(X)
+
+========================================================
+16. DBSCAN
+========================================================
+
+DBSCAN:
+
+Density-Based Spatial Clustering of Applications with Noise
+
+Definition
+----------
+DBSCAN is an unsupervised clustering algorithm that groups points based on
+density and can identify noise/outliers.
+
+--------------------------------------------------------
+IMPORTANT PARAMETERS
+--------------------------------------------------------
+
+eps
+---
+Maximum neighborhood radius used to determine nearby points.
+
+min_samples
+-----------
+Minimum number of points required in the neighborhood for a point to be
+considered a core point.
+
+--------------------------------------------------------
+TYPES OF POINTS
+--------------------------------------------------------
+
+1. Core Point
+2. Border Point
+3. Noise Point
+
+--------------------------------------------------------
+CORE POINT
+--------------------------------------------------------
+
+Has at least min_samples points within its eps neighborhood (including itself,
+as defined by scikit-learn's implementation).
+
+--------------------------------------------------------
+BORDER POINT
+--------------------------------------------------------
+
+A point that is not a core point itself but lies within the neighborhood of a
+core point.
+
+--------------------------------------------------------
+NOISE
+--------------------------------------------------------
+
+A point that does not belong to a dense cluster.
+
+--------------------------------------------------------
+Python
+--------------------------------------------------------
+
+from sklearn.cluster import DBSCAN
+
+model = DBSCAN(
+    eps=0.5,
+    min_samples=5
+)
+
+labels = model.fit_predict(X)
+
+In scikit-learn:
+
+label = -1
+
+represents noise.
+
+========================================================
+K-MEANS vs HIERARCHICAL vs DBSCAN
+========================================================
+
+K-Means
+--------
+• Need to choose K.
+• Centroid-based.
+• Works well for roughly spherical clusters.
+• Sensitive to scaling and outliers.
+
+Hierarchical
+------------
+• Creates hierarchy of clusters.
+• Dendrogram can help choose cluster count.
+• Does not require choosing K during the initial hierarchy construction.
+• Can be computationally expensive for large datasets.
+
+DBSCAN
+------
+• Density-based.
+• Does not require specifying number of clusters.
+• Can identify noise.
+• Can detect arbitrarily shaped dense clusters.
+• Sensitive to eps and min_samples.
+• Can struggle when cluster densities vary greatly.
+
+========================================================
+IMPORTANT FEATURE SCALING
+========================================================
+
+Scaling is especially important for distance-based algorithms:
+
+✓ KNN
+✓ K-Means
+✓ Hierarchical Clustering
+✓ DBSCAN
+✓ SVM
+
+Why?
+
+Because these algorithms use distances or geometry.
+
+Example:
+
+Age       = 20–60
+Salary    = 20,000–2,00,000
+
+Without scaling, Salary can dominate distance calculations.
+
+========================================================
+INTERVIEW QUICK QUESTIONS
+========================================================
+
+Q1. What is pruning?
+
+Ans:
+Pruning reduces unnecessary branches of a Decision Tree to control
+overfitting.
+
+Q2. Difference between pre-pruning and post-pruning?
+
+Ans:
+Pre-pruning stops tree growth early, while post-pruning removes branches
+after the tree has been grown.
+
+Q3. What is KNN?
+
+Ans:
+KNN predicts a new observation using the labels/target values of its nearest
+K training observations.
+
+Q4. Why is scaling important for KNN?
+
+Ans:
+Because KNN uses distance, and features with larger numerical scales can
+dominate the distance calculation.
+
+Q5. What is SVM?
+
+Ans:
+SVM finds a decision boundary that aims to maximize the margin between
+classes.
+
+Q6. What are Support Vectors?
+
+Ans:
+They are the training points closest to the decision boundary and are
+critical to defining the SVM solution.
+
+Q7. What is the kernel trick?
+
+Ans:
+It allows SVM to model nonlinear relationships by implicitly representing
+data in a higher-dimensional feature space.
+
+Q8. Parameter vs Hyperparameter?
+
+Ans:
+Parameters are learned from data; hyperparameters are set/tuned outside the
+direct parameter-learning process.
+
+Q9. GridSearchCV vs RandomizedSearchCV?
+
+Ans:
+GridSearchCV evaluates every specified combination, while RandomizedSearchCV
+evaluates a selected number of sampled combinations.
+
+Q10. What is Cross-Validation?
+
+Ans:
+It repeatedly trains and validates a model on different folds of the
+training data to obtain a more reliable estimate for model selection.
+
+Q11. What is Unsupervised Learning?
+
+Ans:
+Learning patterns or structure from data without labeled target values.
+
+Q12. What is K-Means?
+
+Ans:
+An unsupervised clustering algorithm that partitions data into K clusters
+around centroids.
+
+Q13. What is DBSCAN?
+
+Ans:
+A density-based clustering algorithm that can identify dense clusters and
+noise points.
+
+========================================================
+VERY IMPORTANT CONCEPT CONNECTION
+========================================================
+
+You have now covered a major part of Classical Machine Learning:
+
+SUPERVISED LEARNING
+        |
+        ├── Regression
+        |     ├── Linear Regression
+        |     ├── Multiple Linear Regression
+        |     ├── Polynomial Regression
+        |     ├── Ridge
+        |     └── Lasso
+        |
+        └── Classification
+              ├── Logistic Regression
+              ├── Decision Tree
+              ├── KNN
+              ├── SVM
+              └── Naive Bayes
+
+
+UNSUPERVISED LEARNING
+        |
+        └── Clustering
+              ├── K-Means
+              ├── Hierarchical
+              └── DBSCAN
+
+========================================================
+MOST IMPORTANT PRACTICAL POINTS
+========================================================
+
+Remember these:
+
+1. Decision Tree
+   → Scaling usually NOT required.
+
+2. KNN
+   → Scaling IMPORTANT.
+
+3. SVM
+   → Scaling generally IMPORTANT.
+
+4. K-Means
+   → Scaling usually IMPORTANT.
+
+5. Hierarchical Clustering
+   → Scaling usually IMPORTANT.
+
+6. DBSCAN
+   → Scaling usually IMPORTANT.
+
+7. Decision Tree
+   → Can overfit → control with pruning/max_depth/etc.
+
+8. KNN
+   → K controls bias/variance behavior.
+
+9. SVM
+   → C controls regularization/error trade-off.
+   → gamma controls influence for kernels such as RBF.
+   → kernel controls the type of decision function.
+
+10. Hyperparameter tuning
+    → GridSearchCV / RandomizedSearchCV.
+
+11. Cross-validation
+    → More reliable model selection than relying on one validation split.
+
+12. Final Test Set
+    → Keep it untouched until final evaluation.
+
+========================================================
+LEARNING ORDER FROM YOUR CURRENT SYLLABUS
+========================================================
+
+Decision Tree
+      ↓
+Pruning
+      ↓
+Decision Tree Regression
+      ↓
+KNN Classification
+      ↓
+KNN Regression
+      ↓
+SVM Classification
+      ↓
+SVM Regression
+      ↓
+Parameters & Hyperparameters
+      ↓
+Hyperparameter Tuning
+      ↓
+GridSearchCV / RandomizedSearchCV
+      ↓
+Cross-Validation
+      ↓
+Unsupervised Learning
+      ↓
+K-Means
+      ↓
+Hierarchical Clustering
+      ↓
+DBSCAN
